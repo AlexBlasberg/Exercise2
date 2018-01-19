@@ -1,5 +1,5 @@
 ---
-title       : Insert the chapter title here
+title       : Probability Theory
 description : Insert the chapter description here
 attachments :
   slides_link : https://s3.amazonaws.com/assets.datacamp.com/course/teach/slides_example.pdf
@@ -12,7 +12,7 @@ type: MultipleChoiceExercise
 lang: r
 xp: 50
 skills: 1
-key: 5c97e0de5f
+key: cfac5af27c
 ```
 
 Have a look at the plot that showed up in the viewer to the right. Which type of movie has the worst rating assigned to it?
@@ -55,7 +55,7 @@ type: NormalExercise
 lang: r
 xp: 100
 skills: 1
-key: 9442b99c1e
+key: 01cb7d9bb1
 ```
 
 In the previous exercise, you saw a dataset about movies. In this exercise, we'll have a look at yet another dataset about movies!
@@ -127,4 +127,48 @@ test_function("plot", args = "col")
 test_error()
 
 success_msg("Good work!")
+```
+
+---
+## Chi-squared distribution
+
+```yaml
+type: NormalExercise
+key: 3ff6a52c76
+lang: r
+xp: 100
+skills: 1
+```
+
+Let $X\_1,X\_2$ be two independent normally distributed random variables with $\mu=0$ and $\sigma^2=15$.
+
+
+`@instructions`
+
+Compute $P(X\_1^2+X\_2^2>10)$.
+
+`@hint`
+
+- Note that both random variables are not $\mathcal{N}(0,1)$-distributed but $\mathcal{N}(0,\sigma^2)$. Hence you have to scale appropriately. Afterwards you can use `pchisq()` to compute the probability. 
+
+`@pre_exercise_code`
+```{r}
+
+```
+
+`@sample_code`
+```{r}
+# Compute the probability
+
+```
+
+`@solution`
+```{r}
+# Compute the probability
+1-pchisq(10/15, df = 2)
+```
+
+`@sct`
+```{r}
+test_output_contains("1-pchisq(10/15, df = 2)", times = 1, incorrect_msg = "Not correct!)
 ```
