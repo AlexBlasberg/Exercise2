@@ -15,40 +15,29 @@ skills: 1
 key: cfac5af27c
 ```
 
-Have a look at the plot that showed up in the viewer to the right. Which type of movie has the worst rating assigned to it?
+Two coins (H = heads, T = tails) are tossed. What is the sample space $\Omega$ of this random experiment?
 
 `@instructions`
-- Adventure
-- Action
-- Animation
-- Comedy
+
+- $\\{H,T\\}$
+- $\\{HH,HT,TH,TT\\}$
+- There is no sample space available here.
+- None of the above.
 
 `@hint`
-Have a look at the plot. Which color does the point with the lowest rating have?
 
-`@pre_exercise_code`
-```{r}
-# The pre exercise code runs code to initialize the user's workspace.
-# You can use it to load packages, initialize datasets and draw a plot in the viewer
-
-movies <- read.csv("http://s3.amazonaws.com/assets.datacamp.com/course/introduction_to_r/movies.csv")
-
-library(ggplot2)
-
-ggplot(movies, aes(x = runtime, y = rating, col = genre)) + geom_point()
-```
+The sample space consists of all possible outcomes of a random variable.
 
 `@sct`
 ```{r}
-# SCT written with testwhat: https://github.com/datacamp/testwhat/wiki
 
 msg_bad <- "That is not correct!"
-msg_success <- "Exactly! There seems to be a very bad action movie in the dataset."
+msg_success <- "Correct!"
 test_mc(correct = 2, feedback_msgs = c(msg_bad, msg_success, msg_bad, msg_bad))
 ```
 
 ---
-## More movies
+## Sampling
 
 ```yaml
 type: NormalExercise
@@ -57,42 +46,19 @@ xp: 100
 skills: 1
 key: 01cb7d9bb1
 ```
-
-In the previous exercise, you saw a dataset about movies. In this exercise, we'll have a look at yet another dataset about movies!
-
-A dataset with a selection of movies, `movie_selection`, is available in the workspace.
+Suppose you are the lottery 
 
 `@instructions`
 - Check out the structure of `movie_selection`.
-- Select movies with a rating of 5 or higher. Assign the result to `good_movies`.
-- Use `plot()` to  plot `good_movies$Run` on the x-axis, `good_movies$Rating` on the y-axis and set `col` to `good_movies$Genre`.
 
 `@hint`
 - Use `str()` for the first instruction.
-- For the second instruction, you should use `...[movie_selection$Rating >= 5, ]`.
-- For the plot, use `plot(x = ..., y = ..., col = ...)`.
 
-`@pre_exercise_code`
-```{r}
-# You can also prepare your dataset in a specific way in the pre exercise code
-load(url("https://s3.amazonaws.com/assets.datacamp.com/course/teach/movies.RData"))
-movie_selection <- Movies[Movies$Genre %in% c("action", "animated", "comedy"), c("Genre", "Rating", "Run")]
 
-# Clean up the environment
-rm(Movies)
-```
 
 `@sample_code`
 ```{r}
-# movie_selection is available in your workspace
-
-# Check out the structure of movie_selection
-
-
-# Select movies that have a rating of 5 or higher: good_movies
-
-
-# Plot Run (i.e. run time) on the x axis, Rating on the y axis, and set the color using Genre
+# Draw the lottery numbers for this week
 
 ```
 
