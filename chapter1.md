@@ -219,7 +219,7 @@ test_function('integrate', args = c('ex2', 'lower', 'upper'))
 test_object('variance')
 ```
 ---
-## Normal distribution I
+## Standard normal distribution I
 
 ```yaml
 type: NormalExercise
@@ -229,29 +229,34 @@ xp: 100
 skills: 1
 ```
 
+Let $X\sim\mathcal{N}(0, 1)$.
 
 `@instructions`
 
+- Compute $\phi(3)$, that is, the value of the standard normal density at $c=3$. 
+
 `@hint`
 
-`@pre_exercise_code`
-```{r}
+- To compute values of $\phi(\cdot)$ you can use `dnorm()`
 
-```
 
 `@sample_code`
 ```{r}
+# Compute the value of the standard normal density at c=3
+
 
 ```
 
 `@solution`
 ```{r}
+# Compute the value of the standard normal density at c=3
+dnorm(3)
 
 ```
 
 `@sct`
 ```{r}
-
+test_function_result('dnorm')
 ```
 
 
