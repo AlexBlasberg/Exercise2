@@ -46,25 +46,27 @@ xp: 100
 skills: 1
 key: 01cb7d9bb1
 ```
-Suppose you are the lottery 
+Suppose you are the lottery fairy in a weekly lottery, where $6$ unique numbers out of 49 numbers are drawn.
 
 `@instructions`
 
+- Draw the winning numbers for this week.
 
 `@hint`
 
 - You can use the function `sample()` to draw random numbers.
-
+- The set of elements is $\\{1,...,49\\}$.
+- You can specify the numbers to draw via the argument `size`.
 
 `@sample_code`
 ```{r}
-# Draw the lottery numbers for this week
+# Draw the winning numbers for this week
 
 ```
 
 `@solution`
 ```{r}
-# Draw the lottery numbers for this week
+# Draw the winning numbers for this week
 sample(1:49, size = 6)
 ```
 
@@ -94,7 +96,7 @@ $$f\_X(x)=\frac{x}{4}e^{-\frac{x^2}{8}},\quad x\geq 0.$$
 `@instructions`
 
 - Define the pdf from above as a function `f()`. **Hint:** For the natural exponential function you can use `exp()`.
-- Check that the defined function is indeed a pdf.
+- Check whether the defined function is indeed a pdf.
 
 `@hint`
 
@@ -145,7 +147,7 @@ xp: 100
 skills: 1
 ```
 
-In this exercise we want to compute the expected value and variance of the random variable $X$ considered in the previous 
+In this exercise we want to compute the expected value and variance of the random variable $X$ considered in the previous exercise. 
 
 The pdf `f()` from the previous exercise is available in your working environment. 
 
@@ -229,7 +231,7 @@ xp: 100
 skills: 1
 ```
 
-Let $X\sim\mathcal{N}(0, 1)$.
+Let $Z\sim\mathcal{N}(0, 1)$.
 
 `@instructions`
 
@@ -237,7 +239,7 @@ Let $X\sim\mathcal{N}(0, 1)$.
 
 `@hint`
 
-- To compute values of $\phi(\cdot)$ you can use `dnorm()`
+- To compute values of $\phi(\cdot)$ you can use `dnorm()`.
 
 
 `@sample_code`
@@ -260,6 +262,82 @@ test_function_result('dnorm')
 ```
 
 
+
+---
+## Standard normal distribution II
+
+```yaml
+type: NormalExercise
+key: 95f04b63f5
+lang: r
+xp: 100
+skills: 1
+```
+Let $Z\sim\mathcal{N}(0, 1)$.
+
+`@instructions`
+
+- Compute $P(-1.96\leq Z\leq 1.96)$ by using the function `pnorm()`.
+
+`@hint`
+
+- Probabilities of the form $P(a\leq Z\leq b)$ can be computed as $P(Z\leq b)-P(Z\leq a)$. Alternatively you can exploit the symmetry of the standard normal pdf.
+
+
+`@sample_code`
+```{r}
+# Compute the probability
+
+
+```
+
+`@solution`
+```{r}
+# Compute the probability
+pnorm(1.96)-pnorm(-1.96)
+
+```
+
+`@sct`
+```{r}
+test_function_result('pnorm')
+```
+
+---
+## Normal distribution I
+
+```yaml
+type: NormalExercise
+key: 6a2bd11c98
+lang: r
+xp: 100
+skills: 1
+```
+
+
+`@instructions`
+
+`@hint`
+
+`@pre_exercise_code`
+```{r}
+
+```
+
+`@sample_code`
+```{r}
+
+```
+
+`@solution`
+```{r}
+
+```
+
+`@sct`
+```{r}
+
+```
 ---
 ## Normal distribution II
 
