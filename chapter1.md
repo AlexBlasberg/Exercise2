@@ -5,7 +5,7 @@ attachments :
   slides_link : https://s3.amazonaws.com/assets.datacamp.com/course/teach/slides_example.pdf
 
 ---
-## A really bad movie
+## Sample space
 
 ```yaml
 type: MultipleChoiceExercise
@@ -49,11 +49,11 @@ key: 01cb7d9bb1
 Suppose you are the lottery 
 
 `@instructions`
-- Check out the structure of `movie_selection`.
+
 
 `@hint`
-- Use `str()` for the first instruction.
 
+- You can use the function `sample()` to draw random numbers.
 
 
 `@sample_code`
@@ -64,39 +64,216 @@ Suppose you are the lottery
 
 `@solution`
 ```{r}
-# movie_selection is available in your workspace
-
-# Check out the structure of movie_selection
-str(movie_selection)
-
-# Select movies that have a rating of 5 or higher: good_movies
-good_movies <- movie_selection[movie_selection$Rating >= 5, ]
-
-# Plot Run (i.e. run time) on the x axis, Rating on the y axis, and set the color using Genre
-plot(good_movies$Run, good_movies$Rating, col = good_movies$Genre)
+# Draw the lottery numbers for this week
+sample(1:49, size = 6)
 ```
 
 `@sct`
 ```{r}
-# SCT written with testwhat: https://github.com/datacamp/testwhat/wiki
 
-test_function("str", args = "object",
-              not_called_msg = "You didn't call `str()`!",
-              incorrect_msg = "You didn't call `str(object = ...)` with the correct argument, `object`.")
+```
 
-test_object("good_movies")
 
-test_function("plot", args = "x")
-test_function("plot", args = "y")
-test_function("plot", args = "col")
 
-test_error()
+---
+## Probability density function
 
-success_msg("Good work!")
+```yaml
+type: NormalExercise
+key: 0c7164ab11
+lang: r
+xp: 100
+skills: 1
+```
+
+Consider a random variable $X$ with probability density function (pdf)
+
+$$f\_X(x)=\frac{x}{4}e^{-\frac{x^2}{8}},\quad x\geq 0.$$
+
+
+`@instructions`
+
+- Define the pdf from above as a function `f()`. Hint: For the natural exponential function you can use `exp()`.
+- Check whether the defined function is indeed a pdf.
+
+`@hint`
+
+- You can use `function()` to define a function.
+- In order to be a pdf the integral of `f()` over the whole domain has to be equal to 1. That is, $\int\_0^\infty f\_X(x)dx=1$.
+- `integrate()` performs integration in R and with `$value` you can access the numerical value of the computed integral.
+
+`@sample_code`
+```{r}
+# Define the pdf
+
+
+# Integrate f over the domain
+
+
+```
+
+`@solution`
+```{r}
+# Define the pdf
+f <- function(x){(x/4)*exp(-x^2/8)}
+
+# Integrate f over the domain
+integrate(f, 0, Inf)$value
+```
+
+`@sct`
+```{r}
+test_function_definition("f",
+                         function_test = {
+                           test_expression_result("f(1)")
+                           test_expression_result("f(4)")
+                           test_expression_result("f(10)")
+                           test_expression_result("f(100)")
+                         })
+test_function('integrate', args = c('f', 'lower', 'upper'))
+test_output_contains('1', incorrect_msg = 'Did you access the value of the integral?')
 ```
 
 ---
-## Chi-squared distribution
+## Expected value and variance
+
+```yaml
+type: NormalExercise
+key: abb753ed1e
+lang: r
+xp: 100
+skills: 1
+```
+
+In this exercise we want to compute the expected value and variance of the random variable $X$ considered in the previous 
+
+The pdf `f()` from the previous exercise is available in your working environment. 
+
+`@instructions`
+
+- Define a suitable function `EV()`.
+- Compute the expected value of $X$. Store the result in `expected_value`.
+- Define a suitable function `VAR()`.
+- Compute the variance of $X$. Store the result in `variance`.
+
+`@hint`
+
+- The expected value of $X$ is defined as $\mathbb{E}[X]=\int\_0^\infty xf\_X(x)dx$.
+- The variance of $X$ is defined as $Var[X]=\mathbb{E}[X^2]-\mathbb{E}[X]^2$, where $\mathbb{E}[X^2]=\int\_0^\infty x^2f\_X(x)dx$.
+
+`@pre_exercise_code`
+```{r}
+f <- function(x){(x/4)*exp(-x^2/8)}
+```
+
+`@sample_code`
+```{r}
+# Define the function EV
+
+
+# Compute the expected value of X
+
+
+# Define the function VAR
+
+
+# Compute the variance of X
+
+
+```
+
+`@solution`
+```{r}
+# Define the function EV
+EV <- function(x){x*f(x)}
+
+# Compute the expected value of X
+expected_value <- integrate(EV, 0, Inf)$value
+
+# Define the function VAR
+VAR <- function(x){x^2*f(x)}
+
+# Compute the variance of X
+variance <- integrate(VAR, 0, Inf)$value - expected_value^2
+```
+
+`@sct`
+```{r}
+
+```
+---
+## Normal distribution
+
+```yaml
+type: NormalExercise
+key: 54447b11cd
+lang: r
+xp: 100
+skills: 1
+```
+
+
+`@instructions`
+
+`@hint`
+
+`@pre_exercise_code`
+```{r}
+
+```
+
+`@sample_code`
+```{r}
+
+```
+
+`@solution`
+```{r}
+
+```
+
+`@sct`
+```{r}
+
+```
+
+---
+## Chi-squared distribution I
+
+```yaml
+type: NormalExercise
+key: 5152d9a665
+lang: r
+xp: 100
+skills: 1
+```
+
+
+`@instructions`
+
+`@hint`
+
+`@pre_exercise_code`
+```{r}
+
+```
+
+`@sample_code`
+```{r}
+
+```
+
+`@solution`
+```{r}
+
+```
+
+`@sct`
+```{r}
+
+```
+---
+## Chi-squared distribution II
 
 ```yaml
 type: NormalExercise
@@ -137,4 +314,76 @@ Compute $P(X\_1^2+X\_2^2>10)$.
 `@sct`
 ```{r}
 test_output_contains("1-pchisq(10/15, df = 2)", times = 1, incorrect_msg = "Not correct!)
+```
+
+---
+## Student t distribution
+
+```yaml
+type: NormalExercise
+key: d8de148eff
+lang: r
+xp: 100
+skills: 1
+```
+
+
+`@instructions`
+
+`@hint`
+
+`@pre_exercise_code`
+```{r}
+
+```
+
+`@sample_code`
+```{r}
+
+```
+
+`@solution`
+```{r}
+
+```
+
+`@sct`
+```{r}
+
+```
+
+---
+## F distribution
+
+```yaml
+type: NormalExercise
+key: 300c006a17
+lang: r
+xp: 100
+skills: 1
+```
+
+
+`@instructions`
+
+`@hint`
+
+`@pre_exercise_code`
+```{r}
+
+```
+
+`@sample_code`
+```{r}
+
+```
+
+`@solution`
+```{r}
+
+```
+
+`@sct`
+```{r}
+
 ```
