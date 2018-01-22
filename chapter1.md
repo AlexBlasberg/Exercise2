@@ -93,8 +93,8 @@ $$f\_X(x)=\frac{x}{4}e^{-\frac{x^2}{8}},\quad x\geq 0.$$
 
 `@instructions`
 
-- Define the pdf from above as a function `f()`. Hint: For the natural exponential function you can use `exp()`.
-- Check whether the defined function is indeed a pdf.
+- Define the pdf from above as a function `f()`. **Hint:** For the natural exponential function you can use `exp()`.
+- Check that the defined function is indeed a pdf.
 
 `@hint`
 
@@ -151,9 +151,9 @@ The pdf `f()` from the previous exercise is available in your working environmen
 
 `@instructions`
 
-- Define a suitable function `EV()`.
+- Define a suitable function `ex()`.
 - Compute the expected value of $X$. Store the result in `expected_value`.
-- Define a suitable function `VAR()`.
+- Define a suitable function `ex2()`.
 - Compute the variance of $X$. Store the result in `variance`.
 
 `@hint`
@@ -168,13 +168,13 @@ f <- function(x){(x/4)*exp(-x^2/8)}
 
 `@sample_code`
 ```{r}
-# Define the function EV
+# Define the function ex
 
 
 # Compute the expected value of X
 
 
-# Define the function VAR
+# Define the function ex2
 
 
 # Compute the variance of X
@@ -184,14 +184,14 @@ f <- function(x){(x/4)*exp(-x^2/8)}
 
 `@solution`
 ```{r}
-# Define the function EV
-EV <- function(x){x*f(x)}
+# Define the function ex
+ex <- function(x){x*f(x)}
 
 # Compute the expected value of X
-expected_value <- integrate(EV, 0, Inf)$value
+expected_value <- integrate(ex, 0, Inf)$value
 
-# Define the function VAR
-VAR <- function(x){x^2*f(x)}
+# Define the function ex2
+ex2 <- function(x){x^2*f(x)}
 
 # Compute the variance of X
 variance <- integrate(VAR, 0, Inf)$value - expected_value^2
@@ -199,10 +199,27 @@ variance <- integrate(VAR, 0, Inf)$value - expected_value^2
 
 `@sct`
 ```{r}
-
+test_function_definition("ex",
+                         function_test = {
+                           test_expression_result("EV(1)")
+                           test_expression_result("EV(4)")
+                           test_expression_result("EV(10)")
+                           test_expression_result("EV(100)")
+                         })
+test_function('integrate', args = c('ex', 'lower', 'upper')) 
+test_object('expected_value')
+test_function_definition("ex2",
+                         function_test = {
+                           test_expression_result("VAR(1)")
+                           test_expression_result("VAR(4)")
+                           test_expression_result("VAR(10)")
+                           test_expression_result("VAR(100)")
+                         })
+test_function('integrate', args = c('ex2', 'lower', 'upper'))
+test_object('variance')
 ```
 ---
-## Normal distribution
+## Normal distribution I
 
 ```yaml
 type: NormalExercise
@@ -237,6 +254,42 @@ skills: 1
 
 ```
 
+
+---
+## Normal distribution II
+
+```yaml
+type: NormalExercise
+key: ffe8c2a318
+lang: r
+xp: 100
+skills: 1
+```
+
+
+`@instructions`
+
+`@hint`
+
+`@pre_exercise_code`
+```{r}
+
+```
+
+`@sample_code`
+```{r}
+
+```
+
+`@solution`
+```{r}
+
+```
+
+`@sct`
+```{r}
+
+```
 ---
 ## Chi-squared distribution I
 
