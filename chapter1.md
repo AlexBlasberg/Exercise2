@@ -132,7 +132,7 @@ test_function_definition("f",
                            test_expression_result("f(10)")
                            test_expression_result("f(100)")
                          })
-test_function('integrate', args = c('f', 'lower', 'upper'), eval = F)
+test_function('integrate', args = c('f', 'lower', 'upper'), eval = c(F, T, T))
 test_output_contains('1', incorrect_msg = 'Did you access the value of the integral?')
 ```
 
