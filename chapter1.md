@@ -449,7 +449,7 @@ Compute $P(X\_1^2+X\_2^2>10)$.
 
 `@sct`
 ```{r}
-test_output_contains("1-pchisq(10/15, df = 2)", times = 1, incorrect_msg = "Not correct!)
+test_output_contains("1-pchisq(10/15, df = 2)", times = 1, incorrect_msg = "Not correct!")
 ```
 
 ---
