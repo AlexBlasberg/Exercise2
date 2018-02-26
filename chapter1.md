@@ -208,7 +208,7 @@ test_function_definition("ex",
                            test_expression_result("ex(10)")
                            test_expression_result("ex(100)")
                          })
-test_function('integrate', args = c('f', 'lower', 'upper')) 
+test_function('integrate', args = c('f', 'lower', 'upper'), eval = c(F, T, T)) 
 test_object('expected_value')
 test_function_definition("ex2",
                          function_test = {
@@ -217,7 +217,7 @@ test_function_definition("ex2",
                            test_expression_result("ex2(10)")
                            test_expression_result("ex2(100)")
                          })
-test_function('integrate', args = c('f', 'lower', 'upper'))
+test_function('integrate', args = c('f', 'lower', 'upper'), eval = c(F, T, T))
 test_object('variance')
 ```
 ---
