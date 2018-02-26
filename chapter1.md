@@ -203,19 +203,19 @@ variance <- integrate(VAR, 0, Inf)$value - expected_value^2
 ```{r}
 test_function_definition("ex",
                          function_test = {
-                           test_expression_result("EV(1)")
-                           test_expression_result("EV(4)")
-                           test_expression_result("EV(10)")
-                           test_expression_result("EV(100)")
+                           test_expression_result("ex(1)")
+                           test_expression_result("ex(4)")
+                           test_expression_result("ex(10)")
+                           test_expression_result("ex(100)")
                          })
 test_function('integrate', args = c('ex', 'lower', 'upper')) 
 test_object('expected_value')
 test_function_definition("ex2",
                          function_test = {
-                           test_expression_result("VAR(1)")
-                           test_expression_result("VAR(4)")
-                           test_expression_result("VAR(10)")
-                           test_expression_result("VAR(100)")
+                           test_expression_result("ex2(1)")
+                           test_expression_result("ex2(4)")
+                           test_expression_result("ex2(10)")
+                           test_expression_result("ex2(100)")
                          })
 test_function('integrate', args = c('ex2', 'lower', 'upper'))
 test_object('variance')
