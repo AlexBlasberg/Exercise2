@@ -196,7 +196,7 @@ expected_value <- integrate(ex, 0, Inf)$value
 ex2 <- function(x){x^2*f(x)}
 
 # Compute the variance of X
-variance <- integrate(VAR, 0, Inf)$value - expected_value^2
+variance <- integrate(ex2, 0, Inf)$value - expected_value^2
 ```
 
 `@sct`
