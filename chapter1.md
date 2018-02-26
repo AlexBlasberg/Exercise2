@@ -117,7 +117,7 @@ $$f\_X(x)=\frac{x}{4}e^{-\frac{x^2}{8}},\quad x\geq 0.$$
 `@solution`
 ```{r}
 # Define the pdf
-f <- function(x){(x/4)*exp(-x^2/8)}
+f <- function(x){x/4*exp(-x^2/8)}
 
 # Integrate f over the domain
 integrate(f, 0, Inf)$value
