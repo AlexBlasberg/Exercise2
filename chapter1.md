@@ -34,7 +34,6 @@ msg_bad <- "That is not correct!"
 msg_success <- "Correct!"
 test_mc(correct = 2, feedback_msgs = c(msg_bad, msg_success, msg_bad, msg_bad))
 ```
-
 ---
 ## Sampling
 
@@ -80,9 +79,6 @@ sample(1:49, size = 6)
 ```{r}
 test_output_contains("sample(1:49, 6)")
 ```
-
-
-
 ---
 ## Probability density function
 
@@ -141,7 +137,6 @@ test_function_definition("f",
 test_function('integrate', args = c('f', 'lower', 'upper'), eval = c(F, T, T))
 test_output_contains('1', incorrect_msg = 'Did you access the value of the integral?')
 ```
-
 ---
 ## Expected value and variance
 
@@ -266,9 +261,6 @@ dnorm(3)
 ```{r}
 test_function_result('dnorm')
 ```
-
-
-
 ---
 ## Standard normal distribution II
 
@@ -283,12 +275,12 @@ Let $Z\sim\mathcal{N}(0, 1)$.
 
 `@instructions`
 
-- Compute $P(|Z|\leq 1.96)$ by using the function `pnorm()`.
+- Compute $P(|Z|\leq 1.64)$ by using the function `pnorm()`.
 
 `@hint`
 
 - $P(|Z|\leq z)$ can be rewritten as $P(-z \leq Z \leq z)$.
-- Probabilities of the form $P(a \leq Z \leq b)$ can now be computed as $P(Z\leq b)-P(Z\leq a)=F(b)-F(a)$.
+- Probabilities of the form $P(a \leq Z \leq b)$ can be computed as $P(Z\leq b)-P(Z\leq a)=F(b)-F(a)$. Alternatively you can exploit the symmetry of the standard normal distribution.
 
 `@sample_code`
 ```{r}
@@ -300,14 +292,14 @@ Let $Z\sim\mathcal{N}(0, 1)$.
 `@solution`
 ```{r}
 # Compute the probability
-pnorm(1.96)-pnorm(-1.96)
+pnorm(1.64)-pnorm(-1.64)
 
 ```
 
 `@sct`
 ```{r}
-test_function_result('pnorm', index = 1)
-test_function_result('pnorm', index = 2)
+test_function("pnorm")
+test_output_contains("1 - 2*pnorm(-1.64)", incorrect_msg = "Not correct!")
 ```
 
 ---
@@ -458,7 +450,6 @@ Compute $P(X\_1^2+X\_2^2>10)$.
 ```{r}
 test_output_contains("1-pchisq(10/15, df = 2)", times = 1, incorrect_msg = "Not correct!")
 ```
-
 ---
 ## Student t distribution
 
