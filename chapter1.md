@@ -30,7 +30,6 @@ The sample space consists of all possible outcomes of a random variable.
 
 `@sct`
 ```{r}
-
 msg_bad <- "That is not correct!"
 msg_success <- "Correct!"
 test_mc(correct = 2, feedback_msgs = c(msg_bad, msg_success, msg_bad, msg_bad))
@@ -46,7 +45,7 @@ xp: 100
 skills: 1
 key: 01cb7d9bb1
 ```
-Suppose you are the lottery fairy in a weekly lottery, where $6$ unique numbers out of 49 numbers are drawn.
+Suppose you are the lottery fairy in a weekly lottery, where $6$ out of $49$ unique numbers are drawn.
 
 `@instructions`
 
@@ -58,9 +57,15 @@ Suppose you are the lottery fairy in a weekly lottery, where $6$ unique numbers 
 - The set of elements is $\\{1,...,49\\}$.
 - You can specify the numbers to draw via the argument `size`.
 
+`@pre_exercise_code`
+```{r}
+custom_seed(1)
+```
+
 `@sample_code`
 ```{r}
 # Draw the winning numbers for this week
+
 
 ```
 
@@ -68,11 +73,12 @@ Suppose you are the lottery fairy in a weekly lottery, where $6$ unique numbers 
 ```{r}
 # Draw the winning numbers for this week
 sample(1:49, size = 6)
+
 ```
 
 `@sct`
 ```{r}
-
+test_output_contains("sample(1:49, 6)")
 ```
 
 
@@ -277,12 +283,12 @@ Let $Z\sim\mathcal{N}(0, 1)$.
 
 `@instructions`
 
-- Compute $P(-1.96\leq Z\leq 1.96)$ by using the function `pnorm()`.
+- Compute $P(|Z|\leq 1.96)$ by using the function `pnorm()`.
 
 `@hint`
 
-- Probabilities of the form $P(a\leq Z\leq b)$ can be computed as $P(Z\leq b)-P(Z\leq a)$. Alternatively you can exploit the symmetry of the standard normal pdf.
-
+- $P(|Z|\leq z)$ can be rewritten as $P(-z \leq Z \leq z)$.
+- Probabilities of the form $P(a \leq Z \leq b)$ can now be computed as $P(Z\leq b)-P(Z\leq a)=F(b)-F(a)$.
 
 `@sample_code`
 ```{r}
@@ -300,7 +306,8 @@ pnorm(1.96)-pnorm(-1.96)
 
 `@sct`
 ```{r}
-test_function_result('pnorm')
+test_function_result('pnorm', index = 1)
+test_function_result('pnorm', index = 2)
 ```
 
 ---
