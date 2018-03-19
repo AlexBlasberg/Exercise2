@@ -56,13 +56,10 @@ Suppose you are the lottery fairy in a weekly lottery, where $6$ out of $49$ uni
 - The set of elements is $\\{1,...,49\\}$.
 - You can specify the numbers to draw via the argument `size`.
 
-`@pre_exercise_code`
-```{r}
-custom_seed(1)
-```
 
 `@sample_code`
 ```{r}
+set.seed(1)
 # Draw the winning numbers for this week
 
 
@@ -70,14 +67,14 @@ custom_seed(1)
 
 `@solution`
 ```{r}
+set.seed(1)
 # Draw the winning numbers for this week
 sample(1:49, size = 6)
-
 ```
 
 `@sct`
 ```{r}
-test_output_contains("sample(1:49, 6)")
+test_output_contains("set.seed(1);sample(1:49, 6)")
 ```
 ---
 ## Probability density function
@@ -314,9 +311,14 @@ skills: 1
 ```
 
 
+
 `@instructions`
 
+
+
 `@hint`
+
+
 
 `@pre_exercise_code`
 ```{r}
@@ -451,11 +453,89 @@ Compute $P(X\_1^2+X\_2^2>10)$.
 test_output_contains("1-pchisq(10/15, df = 2)", times = 1, incorrect_msg = "Not correct!")
 ```
 ---
-## Student t distribution
+## Student t distribution I
 
 ```yaml
 type: NormalExercise
 key: d8de148eff
+lang: r
+xp: 100
+skills: 1
+```
+
+Let $X\sim t\_15$.
+
+`@instructions`
+
+- Generate 100 
+
+`@hint`
+
+- You can use `rt()` to generate random numbers from the t distribution.
+- The degrees of freedom can be specified via the argument `df`.
+
+`@sample_code`
+```{r}
+set.seed(1)
+
+```
+
+`@solution`
+```{r}
+set.seed(1)
+rt(100, df = 15)
+```
+
+`@sct`
+```{r}
+test_output_contains("set.seed(1); rt(100, df = 15)")
+```
+
+
+---
+## Student t distribution II
+
+```yaml
+type: NormalExercise
+key: 4cfe724955
+lang: r
+xp: 100
+skills: 1
+```
+
+Let $X\sim t\_1$.
+
+`@instructions`
+
+Plot the density of X. Specify 
+
+`@hint`
+
+- You can plot 
+
+
+`@sample_code`
+```{r}
+
+```
+
+`@solution`
+```{r}
+
+
+```
+
+`@sct`
+```{r}
+
+```
+
+---
+## F distribution I
+
+```yaml
+type: NormalExercise
+key: 300c006a17
 lang: r
 xp: 100
 skills: 1
@@ -487,11 +567,11 @@ skills: 1
 ```
 
 ---
-## F distribution
+## F distribution II
 
 ```yaml
 type: NormalExercise
-key: 300c006a17
+key: 7312947efe
 lang: r
 xp: 100
 skills: 1
