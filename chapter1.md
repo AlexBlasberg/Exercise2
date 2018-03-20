@@ -395,29 +395,34 @@ xp: 100
 skills: 1
 ```
 
+Let $W\sim\chi^2\_{10}$.
 
 `@instructions`
 
+- Compute the values of the corresponding probability density function (pdf) at $1,2,3,...,10$.
+
 `@hint`
 
-`@pre_exercise_code`
-```{r}
-
-```
+- To compute values of the pdf you can use `dchisq()`.
+- Besides the range of points you have to specify the degrees of freedom via the argument `df`.
 
 `@sample_code`
 ```{r}
+# Compute the values of the pdf at 1,2,3,...,10.
+
 
 ```
 
 `@solution`
 ```{r}
+# Compute the values of the pdf at 1,2,3,...,10.
+dchisq(1:10, df = 10)
 
 ```
 
 `@sct`
 ```{r}
-
+test_function_result('dchisq')
 ```
 ---
 ## Chi-squared distribution II
@@ -579,6 +584,47 @@ xp: 100
 skills: 1
 ```
 
+Let $Y\sim F(10, 4)$.
+
+`@instructions`
+
+- Compute the 95%, 97.5% and 99% quantile of the given distribution. Save them in the vector `quantiles`.
+
+`@hint`
+
+- You can compute quantiles of the F distribution using the function `qf()`.
+- Besides the vector of quantiles you have to specify the parameters (here: degrees of freedom) via the arguments `df1` and `df2`.
+
+`@sample_code`
+```{r}
+# Compute the quantiles of the given distribution and save them in quantiles.
+
+
+```
+
+`@solution`
+```{r}
+# Compute the quantiles of the given distribution and save them in quantiles.
+quantiles <- qf(c(0.95, 0.975, 0.99), df1 = 10, df2 = 4)
+
+```
+
+`@sct`
+```{r}
+test_object('quantiles')
+```
+
+---
+## F distribution II
+
+```yaml
+type: NormalExercise
+key: 7312947efe
+lang: r
+xp: 100
+skills: 1
+```
+
 Let $Y\sim F(4,5)$.
 
 `@instructions`
@@ -612,17 +658,17 @@ test_output_contains('integrate(df, lower = 1, upper = 10, df1 = 4, df2 = 5)$val
 ```
 
 ---
-## F distribution II
+## 
 
 ```yaml
 type: NormalExercise
-key: 7312947efe
+key: 63b40e5241
 lang: r
 xp: 100
 skills: 1
 ```
 
-Let $Y\sim F(4,5)$.
+In this exercise we want to v
 
 `@instructions`
 
