@@ -59,7 +59,7 @@ Suppose you are the lottery fairy in a weekly lottery, where $6$ out of $49$ uni
 
 `@sample_code`
 ```{r}
-set.seed(1)
+set.seed(123)
 # Draw the winning numbers for this week
 
 
@@ -67,7 +67,7 @@ set.seed(1)
 
 `@solution`
 ```{r}
-set.seed(1)
+set.seed(123)
 # Draw the winning numbers for this week
 sample(1:49, size = 6)
 
@@ -75,7 +75,7 @@ sample(1:49, size = 6)
 
 `@sct`
 ```{r}
-test_output_contains("set.seed(1);sample(1:49, 6)")
+test_output_contains("set.seed(123);sample(1:49, 6)")
 ```
 ---
 ## Probability density function
@@ -160,6 +160,7 @@ The pdf `f()` from the previous exercise is available in your working environmen
 `@hint`
 
 - The expected value of $X$ is defined as $\mathbb{E}[X]=\int\_0^\infty xf\_X(x)dx$.
+- The value of an integral can be obtained via `$value`.
 - The variance of $X$ is defined as $Var[X]=\mathbb{E}[X^2]-\mathbb{E}[X]^2$, where $\mathbb{E}[X^2]=\int\_0^\infty x^2f\_X(x)dx$.
 
 `@pre_exercise_code`
@@ -352,32 +353,36 @@ xp: 100
 skills: 1
 ```
 
-Let $Y\sim\mathcal{N}(5, 25)$.
+Let $Y\sim\mathcal{N}(2, 12)$.
 
 `@instructions`
 
-
+- Generate 10 random numbers from this distribution.
 
 `@hint`
 
-`@pre_exercise_code`
-```{r}
-
-```
+- You can use `rnorm()` to draw random numbers from a normal distribution.
+- Besides the number of draws you have to specify $\mu$ and $\sigma^2$. This can be done via the arguments `mean` and `sd`, however note that `sd` requires the standard deviation and **not** the variance.
 
 `@sample_code`
 ```{r}
+set.seed(123)
+# Generate 10 random numbers from the given distribution.
+
 
 ```
 
 `@solution`
 ```{r}
+set.seed(123)
+# Generate 10 random numbers from the given distribution.
+rnorm(10, mean = 2, sd = sqrt(12))
 
 ```
 
 `@sct`
 ```{r}
-
+test_output_contains("set.seed(123);rnorm(10, mean = 2, sd = sqrt(12))")
 ```
 ---
 ## Chi-squared distribution I
@@ -447,13 +452,13 @@ Compute $P(X\_1^2+X\_2^2>10)$.
 `@solution`
 ```{r}
 # Compute the probability
-1-pchisq(10/15, df = 2)
+pchisq(10/15, df = 2, lower.tail = F)
 
 ```
 
 `@sct`
 ```{r}
-test_output_contains("1-pchisq(10/15, df = 2)", times = 1, incorrect_msg = "Not correct!")
+test_output_contains('pchisq(10/15, df = 2, lower.tail = F)')
 ```
 ---
 ## Student t distribution I
@@ -500,7 +505,8 @@ qnorm(0.95)
 
 `@sct`
 ```{r}
-
+test_function_result('qt')
+test_function_result('qnorm')
 ```
 
 
@@ -515,7 +521,7 @@ xp: 100
 skills: 1
 ```
 
-Let $X\sim t\_1$. Besides you can see the corresponding plot of the pdf.
+Let $X\sim t\_1$. Besides you can see the plot of the corresponding pdf.
 
 `@instructions`
 
@@ -558,7 +564,8 @@ mean(x)
 
 `@sct`
 ```{r}
-
+test_object('x')
+test_function_result('mean')
 ```
 
 ---
@@ -572,29 +579,36 @@ xp: 100
 skills: 1
 ```
 
+Let $Y\sim F(4,5)$.
 
 `@instructions`
 
+- Compute $P(1<Y<10)$ by integration of the pdf.
+
 `@hint`
 
-`@pre_exercise_code`
-```{r}
-
-```
+- Besides the function that has to be integrated you have to specify lower and upper bounds.
+- The additional parameters of the distribution (here `df1` and `df2`) also have to be passed **inside** the `integrate()` function.
+- The value of the integral can be obtained via `$value`.
 
 `@sample_code`
 ```{r}
+# Compute the probability by integration
+
 
 ```
 
 `@solution`
 ```{r}
+# Compute the probability by integration
+integrate(df, lower = 1, upper = 10, df1 = 4, df2 = 5)$value
 
 ```
 
 `@sct`
 ```{r}
-
+test_function('integrate', args = c('f', 'lower', 'upper', 'df1', 'df2'))
+test_output_contains('integrate(df, lower = 1, upper = 10, df1 = 4, df2 = 5)$value')
 ```
 
 ---
@@ -608,27 +622,34 @@ xp: 100
 skills: 1
 ```
 
+Let $Y\sim F(4,5)$.
 
 `@instructions`
 
+- Compute $P(1<Y<10)$ by integration of the pdf.
+
 `@hint`
 
-`@pre_exercise_code`
-```{r}
-
-```
+- Besides the function that has to be integrated you have to specify lower and upper bounds.
+- The additional parameters of the distribution (here `df1` and `df2`) also have to be passed **inside** the `integrate()` function.
+- The value of the integral can be obtained via `$value`.
 
 `@sample_code`
 ```{r}
+# Compute the probability by integration
+
 
 ```
 
 `@solution`
 ```{r}
+# Compute the probability by integration
+integrate(df, lower = 1, upper = 10, df1 = 4, df2 = 5)$value
 
 ```
 
 `@sct`
 ```{r}
-
+test_function('integrate', args = c('f', 'lower', 'upper', 'df1', 'df2'))
+test_output_contains('integrate(df, lower = 1, upper = 10, df1 = 4, df2 = 5)$value')
 ```
