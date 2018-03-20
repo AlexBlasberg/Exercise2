@@ -70,6 +70,7 @@ set.seed(1)
 set.seed(1)
 # Draw the winning numbers for this week
 sample(1:49, size = 6)
+
 ```
 
 `@sct`
@@ -310,34 +311,35 @@ xp: 100
 skills: 1
 ```
 
-
+Let $Y\sim\mathcal{N}(5, 25)$.
 
 `@instructions`
 
-
+- Compute the 99% quantile of the given distribution. That is, the value $y$ such that $\Phi(y)=0.99$.
 
 `@hint`
 
+- You can compute quantiles of the normal distribution using the function `qnorm()`.
+- Besides the quantile you have to specify $\mu$ and $\sigma^2$. This can be done via the arguments `mean` and `sd`, however note that `sd` requires the standard deviation and **not** the variance.
 
-
-`@pre_exercise_code`
-```{r}
-
-```
 
 `@sample_code`
 ```{r}
+# Compute the 99% quantile of a normal distribution with mu = 5 and sigma^2 = 25.
+
 
 ```
 
 `@solution`
 ```{r}
+# Compute the 99% quantile of a normal distribution with mu = 5 and sigma^2 = 25.
+qnorm(0.99, mean = 5, sd = sqrt(25))
 
 ```
 
 `@sct`
 ```{r}
-
+test_function_result('qnorm')
 ```
 ---
 ## Normal distribution II
@@ -350,8 +352,11 @@ xp: 100
 skills: 1
 ```
 
+Let $Y\sim\mathcal{N}(5, 25)$.
 
 `@instructions`
+
+
 
 `@hint`
 
@@ -431,14 +436,11 @@ Compute $P(X\_1^2+X\_2^2>10)$.
 
 - Note that both random variables are not $\mathcal{N}(0,1)$-distributed but $\mathcal{N}(0,\sigma^2)$. Hence you have to scale appropriately. Afterwards you can use `pchisq()` to compute the probability. 
 
-`@pre_exercise_code`
-```{r}
-
-```
 
 `@sample_code`
 ```{r}
 # Compute the probability
+
 
 ```
 
@@ -446,6 +448,7 @@ Compute $P(X\_1^2+X\_2^2>10)$.
 ```{r}
 # Compute the probability
 1-pchisq(10/15, df = 2)
+
 ```
 
 `@sct`
@@ -463,32 +466,41 @@ xp: 100
 skills: 1
 ```
 
-Let $X\sim t\_15$.
+Let $X\sim t\_{10000}$ and $Z\sim\mathcal{N}(0,1)$.
 
 `@instructions`
 
-- Generate 100 
+- Compute the 95% quantile of both distributions. What do you note?
 
 `@hint`
 
-- You can use `rt()` to generate random numbers from the t distribution.
-- The degrees of freedom can be specified via the argument `df`.
+- You can use `qt()` and `qnorm()` to compute quantiles of the given distributions.
+- For the t distribution you have to specify the degrees of freedom `df`.
 
 `@sample_code`
 ```{r}
-set.seed(1)
+# Compute the 95% quantile of a t distribution with 10000 degrees of freedom
+
+
+# Compute the 95% quantile of a standard normal distribution
+
 
 ```
 
 `@solution`
 ```{r}
-set.seed(1)
-rt(100, df = 15)
+# Compute the 95% quantile of a t distribution with 10000 degrees of freedom
+qt(0.95, df = 10000)
+
+# Compute the 95% quantile of a standard normal distribution
+qnorm(0.95)
+
+# Both values are very close to each other. This is not surprising as for sufficient large degrees of freedom the t distribution can be approximated by the standard normal distribution.
 ```
 
 `@sct`
 ```{r}
-test_output_contains("set.seed(1); rt(100, df = 15)")
+
 ```
 
 
@@ -503,26 +515,45 @@ xp: 100
 skills: 1
 ```
 
-Let $X\sim t\_1$.
+Let $X\sim t\_1$. Besides you can see the corresponding plot of the pdf.
 
 `@instructions`
 
-Plot the density of X. Specify 
+- Generate 1000 random numbers from this distribution and assign them to the variable `x`.
+- Compute the sample mean of `x`. Can you explain the result? **Hint:** Focus in particular on the degree(s) of freedom.
 
 `@hint`
 
-- You can plot 
+- You can use `rt()` to draw random numbers from a t distribution.
+- Note that the t distribution is fully parameterized through the degree(s) of freedom. Specify them via the argument `df`.
+- To compute the sample mean of a vector you can use the function `mean()`.
 
+`@pre_exercise_code`
+```{r}
+curve(dt(x, df = 1), xlim = c(-4, 4))
+```
 
 `@sample_code`
 ```{r}
+set.seed(123)
+# Generate 1000 random numbers from the given distribution. Assign them to the variable x.
+
+
+# Compute the sample mean of x.
+
 
 ```
 
 `@solution`
 ```{r}
+set.seed(123)
+# Generate 1000 random numbers from the given distribution. Assign them to the variable x.
+x <- rt(1000, df = 1)
 
+# Compute the sample mean of x.
+mean(x)
 
+# Although a t distribution with M = 1 is, as every other t distribution, symmetric around zero it actually has no expectation. This explains the highly non-zero value for the sample mean.
 ```
 
 `@sct`
