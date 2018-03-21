@@ -399,30 +399,31 @@ Let $W\sim\chi^2\_{10}$.
 
 `@instructions`
 
-- Compute the values of the corresponding probability density function (pdf) at $1,2,3,...,10$.
+- Plot the corresponding probability density function (pdf) using the function `curve()`. Specify the range of x-values as $[0,25]$ via the argument `xlim`.
 
 `@hint`
 
-- To compute values of the pdf you can use `dchisq()`.
-- Besides the range of points you have to specify the degrees of freedom via the argument `df`.
+- `curve()` expects the function with their respective parameter(s) (here: degrees of freedom `df`) as an argument.
+- The range of x-values in `xlim` can be passed as a vector consisting of both endpoints.
 
 `@sample_code`
 ```{r}
-# Compute the values of the pdf at 1,2,3,...,10.
+# Plot the pdf of a chi^2 random variable with df = 10
 
 
 ```
 
 `@solution`
 ```{r}
-# Compute the values of the pdf at 1,2,3,...,10.
-dchisq(1:10, df = 10)
+# Plot the pdf of a chi^2 random variable with df = 10
+curve(dchisq(x, df = 10), xlim = c(0, 25))
 
 ```
 
 `@sct`
 ```{r}
-test_function_result('dchisq')
+test_function('curve', args = c('expr', 'xlim'), eval = c(NA, T))
+test_student_typed('dchisq')
 ```
 ---
 ## Chi-squared distribution II
@@ -588,30 +589,30 @@ Let $Y\sim F(10, 4)$.
 
 `@instructions`
 
-- Compute the 95%, 97.5% and 99% quantile of the given distribution. Save them in the vector `quantiles`.
+- Plot the quantile function of the given distribution using the function `curve()`.
 
 `@hint`
 
-- You can compute quantiles of the F distribution using the function `qf()`.
-- Besides the vector of quantiles you have to specify the parameters (here: degrees of freedom) via the arguments `df1` and `df2`.
+- `curve()` expects the function with their respective parameters (here: degrees of freedom `df1` and `df2`) as an argument.
 
 `@sample_code`
 ```{r}
-# Compute the quantiles of the given distribution and save them in quantiles.
+# Plot the quantile function of the given distribution
 
 
 ```
 
 `@solution`
 ```{r}
-# Compute the quantiles of the given distribution and save them in quantiles.
-quantiles <- qf(c(0.95, 0.975, 0.99), df1 = 10, df2 = 4)
+# Plot the quantile function of the given distribution
+curve(qf(x, df1 = 10, df2 = 4))
 
 ```
 
 `@sct`
 ```{r}
-test_object('quantiles')
+test_function('curve', args = 'expr', eval = NA)
+test_student_typed('qf')
 ```
 
 ---
