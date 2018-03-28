@@ -2,7 +2,7 @@
 title       : Review of Statistics
 description : Insert the chapter description here
 ---
-## Biased ...
+## 1. Biased ...
 
 ```yaml
 type: NormalExercise
@@ -79,7 +79,7 @@ test_function('abline', args = c('v', 'col'))
 ```
 
 ---
-## ... but consistent estimator
+## 2. ... but consistent estimator
 
 ```yaml
 type: NormalExercise
@@ -145,7 +145,7 @@ test_function('abline', args = c('v', 'col'))
 ```
 
 ---
-## Efficiency of an estimator
+## 3. Efficiency of an estimator
 
 ```yaml
 type: NormalExercise
@@ -199,4 +199,193 @@ w <- c(rep((1+0.5)/100, 50), rep((1-0.5)/100, 50))
 `@sct`
 ```{r}
 
+```
+
+---
+## Hypothesis Test - One sample t-test
+
+```yaml
+type: NormalExercise
+key: e37112756b
+lang: r
+xp: 100
+skills: 1
+```
+
+
+`@instructions`
+
+`@hint`
+
+`@pre_exercise_code`
+```{r}
+
+```
+
+`@sample_code`
+```{r}
+
+```
+
+`@solution`
+```{r}
+
+```
+
+`@sct`
+```{r}
+
+```
+
+---
+## Hypothesis Test - Two sample t-test
+
+```yaml
+type: NormalExercise
+key: cb2df0f522
+lang: r
+xp: 100
+skills: 1
+```
+
+
+`@instructions`
+
+- Test the null using a two sample t-test.
+
+`@hint`
+
+`@pre_exercise_code`
+```{r}
+
+```
+
+`@sample_code`
+```{r}
+
+```
+
+`@solution`
+```{r}
+
+```
+
+`@sct`
+```{r}
+
+```
+
+---
+## (Co)variance and Correlation I
+
+```yaml
+type: NormalExercise
+key: 3f55a664d3
+lang: r
+xp: 100
+skills: 1
+```
+
+Consider a random sample $(X\_i, Y\_i)$ for $i=1,...,100$.
+
+The respective vectors $X$ and $Y$ are already available in your working environment as `X` and `Y`.
+
+`@instructions`
+
+- Compute the variance of $X$ using the function `cov()`.
+- Compute the covariance of $X$ and $Y$.
+- Compute the correlation between $X$ and $Y$.
+
+`@hint`
+
+- The variance is just a special case of the covariance.
+- `cov()` as well as `cor()` expect a vector for each variable.
+
+`@pre_exercise_code`
+```{r}
+custom_seed(123)
+X <- runif(100, 900, 1000)
+Y <- 3*X+rnorm(100, 0, 100)
+```
+
+`@sample_code`
+```{r}
+# Compute the variance of X
+
+
+# Compute the covariance of X and Y
+
+
+# Compute the correlation between X and Y
+
+
+```
+
+`@solution`
+```{r}
+# Compute the variance of X with cov()
+cov(X, X)
+
+# Compute the covariance of X and Y
+cov(X, Y)
+
+# Compute the correlation between X and Y
+cor(X, Y)
+
+```
+
+`@sct`
+```{r}
+test_function_result("cov", index = 1)
+test_function_result("cov", index = 2)
+test_function_result("cor")
+```
+
+---
+## (Co)variance and Correlation II
+
+```yaml
+type: NormalExercise
+key: 260ed038f1
+lang: r
+xp: 100
+skills: 1
+```
+
+Once the session has initialized you will see the plot of $Y$ against $X$.
+
+`@instructions`
+
+- Compute the correlation between $X$ and $Y$. 
+
+`@hint`
+
+- `cor()` expects a vector for each variable.
+
+`@pre_exercise_code`
+```{r}
+custom_seed(123)
+X <- runif(100, 0, 3)
+Y <- exp(-X) + rnorm(100, 0, .05)
+plot(Y ~ X)
+```
+
+`@sample_code`
+```{r}
+# Compute the correlation between x and y
+
+
+```
+
+`@solution`
+```{r}
+# Compute the correlation between x and y
+cor(X, Y)
+
+```
+
+`@sct`
+```{r}
+test_function_result("cor")
+success_msg('Correct! The correlation can only measure linear dependencies. However the dependency is clearly nonlinear (exponential).')
 ```
