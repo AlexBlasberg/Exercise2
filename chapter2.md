@@ -76,6 +76,7 @@ test_function_definition('Y_tilde', function_test = {
 test_object('est_biased')
 test_function('hist', args = 'x')
 test_function('abline', args = c('v', 'col'))
+success_msg('Correct! The estimator is biased.')
 ```
 
 ---
@@ -142,6 +143,7 @@ abline(v = 10, col = "red")
 test_object('est_consistent')
 test_function('hist', args = 'x')
 test_function('abline', args = c('v', 'col'))
+success_msg('Correct! Although biased the estimator is consistent.')
 ```
 
 ---
@@ -155,92 +157,92 @@ xp: 100
 skills: 1
 ```
 
-Let $Y\sim\mathcal{N}(0,10)$. In this exercise we want to illustrate the result that the sample mean
+In this exercise we want to illustrate the result that the sample mean
 
-$$\hat{\mu}\_Y=\sum\limits\_{i=1}^{n}a\_iY\_i$$ with equal weighting scheme $a\_i=\frac{1}{n}$ for $i=1,...,100$ is the best linear unbiased estimator (BLUE) of $\mu\_Y$. 
+$$\hat{\mu}\_Y=\sum\limits\_{i=1}^{n}a\_iY\_i$$ with equal weighting scheme $a\_i=\frac{1}{n}$ for $i=1,...,n$ is the best linear unbiased estimator (BLUE) of $\mu\_Y$. 
 
 As an alternative consider the estimator
 
 $$\tilde{\mu}\_Y=\sum\limits\_{i=1}^{n}b\_iY\_i$$
 
-where $b\_i$ (with $\sum\limits\_{i=1}^n b\_i = 1$ to ensure unbiasedness) gives the first $\frac{n}{2}$ observations a higher weighting than the second $\frac{n}{2}$ observations. The respective weighting vector is already available as 
+where $b\_i$ gives the first $\frac{n}{2}$ observations a higher weighting than the second $\frac{n}{2}$ observations. 
+
+The respective weighting vector is already defined and available as `w` in your working environment.
 
 `@instructions`
 
-- Verify that the alternative estimator $\tilde{Y}$ is unbiased as well.
-- Define the alternative estimator as a function `Y_tilde()`.
-
+- Verify that $\tilde{\mu}$ is unbiased.
+- Define the alternative estimator as a function `mu_tilde()`.
+- Randomly draw 100 observations from the $\mathcal{N}(5, 10)$ distribution and compute an estimate with both estimators. Repeat this procedure 10000 times and store the results in `est_bar` and `est_tilde`.
+- Compute the sample variances of `est_bar` and `est_tilde`. What can you say about both estimators?
 
 `@hint`
 
 - In order to be an unbiased estimator all weights have to sum up to 1.
-- 
-
-`@pre_exercise_code`
-```{r}
-
-```
+- Use the function `replicate()` to compute repeatedly estimates of random samples. With the arguments `expr` and `n` you can specify the operation and how often it has to be replicated.
+- To compute sample variances you can use `var()`.
 
 `@sample_code`
 ```{r}
 # Verify that the alternative estimator is unbiased
-w <- c(rep((1+0.5)/100, 50), rep((1-0.5)/100, 50))
+n <- 100
+w <- c(rep((1+0.5)/n, n/2), rep((1-0.5)/n, n/2))
 
 
-# Define the alternative estimator Y_tilde
+# Define the alternative estimator mu_tilde
 
 
-# 
-```
-
-`@solution`
-```{r}
-
-```
-
-`@sct`
-```{r}
-
-```
+# Compute repeatedly estimates for both estimators and store the results in est_bar and est_tilde
+set.seed(123)
 
 
----
-## 4.
 
-```yaml
-type: NormalExercise
-key: 163cfe0cc0
-lang: r
-xp: 100
-skills: 1
-```
+# Compute the sample variances for est_bar and est_tilde
 
 
-`@instructions`
-
-`@hint`
-
-`@pre_exercise_code`
-```{r}
-
-```
-
-`@sample_code`
-```{r}
 
 ```
 
 `@solution`
 ```{r}
+# Verify that the alternative estimator is unbiased
+n <- 100
+w <- c(rep((1+0.5)/n, n/2), rep((1-0.5)/n, n/2))
+sum(w)
+
+# Define the alternative estimator mu_tilde
+mu_tilde <- function(x){sum(w*x)}
+
+# Compute repeatedly estimates for both estimators and store the results in est_bar and est_tilde
+set.seed(123)
+est_bar <- replicate(expr = mean(rnorm(100, 5, 10)), n = 10000)
+est_tilde <- replicate(expr = mu_tilde(rnorm(100, 5, 10)), n = 10000)
+
+# Compute the sample variances for est_bar and est_tilde
+var(est_bar)
+var(est_tilde)
 
 ```
 
 `@sct`
 ```{r}
-
+test_function_result('sum')
+test_function_definition('mu_tilde',
+                         function_test = {
+                           test_expression_result("mu_tilde(1:100)")
+                           test_expression_result("mu_tilde(2:101)")
+                         })
+test_object('est_bar')
+test_object('est_tilde')
+test_function_result('var', index = 1)
+test_function_result('var', index = 2)
+success_msg('Correct! The sample mean is more efficient (that is, has a lower variance) than the alternative estimator.')
 ```
+
+
+
 ---
-## 5. Hypothesis test - t statistic
+## 4. Hypothesis test - t statistic
 
 ```yaml
 type: NormalExercise
@@ -252,17 +254,18 @@ skills: 1
 
 Consider the CPS data set from Chapter 3.6 again which is available as `cps` in your working environment.
 
-Suppose you want to test the null hypothesis $H\_0:$
+We suppose that the average hourly earnings (in prices of 2012) `ahe12` exceed 23.50 $\frac{\$}{h}$ and wish to test this hypothesis at a significance level of $\alpha=0.05$. For that reason please do the following:
 
 `@instructions`
 
-- Compute the t statistic by hand and assign it to `tstat`.
-- Use `tstat` to accept or reject the null hypothesis.
+- Compute the test statistic by hand and assign it to `tstat`.
+- Use `tstat` to accept or reject the null hypothesis. Please do so using the normal approximation. 
 
 `@hint`
 
-- The t statistic is defined as $\frac{\bar{Y}-\mu\_{Y,0}}{s\_{Y}/\sqrt{n}}$ where is $s\_Y$ denotes the sample variance.
-- To decide whether the null hypothesis is accepted or rejected you can compare the t statistic with the respective quantile of the standard normal distribution.
+- We test $H\_0:\mu\_{Y\_{ahe}}\leq 23.5$ vs. $H\_1:\mu\_{Y\_{ahe}}>23.5$. That is, we conduct a right-sided test.
+- The t statistic is defined as $\frac{\bar{Y}-\mu\_{Y,0}}{s\_{Y}/\sqrt{n}}$ where $s\_Y$ denotes the sample variance.
+- To decide whether the null hypothesis is accepted or rejected you can compare the t statistic with the respective quantile of the standard normal distribution. Use logical operators to check for this.
 
 `@pre_exercise_code`
 ```{r}
@@ -282,7 +285,7 @@ cps <- read.table("http://s3.amazonaws.com/assets.datacamp.com/production/course
 `@solution`
 ```{r}
 # Compute the t statistic by hand and assign it to tstat
-tstat <- (mean(cps$ahe12)-20)/(sd(cps$ahe12)/sqrt(length(cps$ahe12)))
+tstat <- (mean(cps$ahe12)-23.5)/(sd(cps$ahe12)/sqrt(length(cps$ahe12)))
 
 # Use tstat to accept or reject the null
 tstat > qnorm(0.95)
@@ -292,14 +295,14 @@ tstat > qnorm(0.95)
 `@sct`
 ```{r}
 test_object('tstat')
-test_function('qnorm', args = 'p')
+test_function_result('qnorm')
 test_student_typed('tstat', times = 2)
 test_or(test_output_contains('T'), test_output_contains('F'))
 ```
 
 
 ---
-## 6. Hypothesis test - p-value
+## 5. Hypothesis test - p-value
 
 ```yaml
 type: NormalExercise
@@ -309,6 +312,10 @@ xp: 100
 skills: 1
 ```
 
+Reconsider the test situation from previous exercise. `cps` as well as `tstat` are available in your working environment.
+
+Instead of using the t statistic as decision criterion we can also use the respective p-value. For that reason please do the following:
+
 
 `@instructions`
 
@@ -317,13 +324,13 @@ skills: 1
 
 `@hint`
 
--
+- The p-value for a right-sided test can be computed as $p=P(t>t^{act}|H\_0)$.
 - We reject the null if $p<\alpha$. Use logical operators to check for this.
 
 `@pre_exercise_code`
 ```{r}
 cps <- read.table("http://s3.amazonaws.com/assets.datacamp.com/production/course_1276/datasets/cps_ch3.csv", header = T, sep = ";")
-tstat <- (mean(cps$ahe12)-20)/(sd(cps$ahe12)/sqrt(length(cps$ahe12)))
+tstat <- (mean(cps$ahe12)-23.5)/(sd(cps$ahe12)/sqrt(length(cps$ahe12)))
 ```
 
 `@sample_code`
@@ -339,7 +346,7 @@ tstat <- (mean(cps$ahe12)-20)/(sd(cps$ahe12)/sqrt(length(cps$ahe12)))
 `@solution`
 ```{r}
 # Compute the p-value by hand and assign it to pval
-
+pval <- 1-pnorm(tstat)
 
 # Use pval to accept or reject the null
 pval < 0.05
@@ -354,7 +361,7 @@ test_or(test_output_contains('T'), test_output_contains('F'))
 ```
 
 ---
-## 7. Hypothesis test - one sample t-test
+## 6. Hypothesis test - one sample t-test
 
 ```yaml
 type: NormalExercise
@@ -364,33 +371,113 @@ xp: 100
 skills: 1
 ```
 
+In the last two exercises we discovered two ways of conducting a hypothesis test. In practice these approaches seem very cumbersome and so R provides the function `t.test()` which does most of the work automatically for us. In fact it provides t statistics, p-values and even confidence intervals (more on the latter in later exercises). In addition it also uses the t instead of the normal distribution which becomes important especially for small sample sizes. 
+
+The data set `cps` as well as the variable `pval` from Exercise 3.4 are available in your working environment.
 
 `@instructions`
 
-- Do 
-- Extract the t statistic and p-value from the list created by `t.test()`. Assign them to `tstat2` and `pval2`.
-- Compute the difference between 
+- Conduct the hypothesis test from previous exercises with the function `t.test()`.
+- Extract the t statistic and p-value from the list created by `t.test()`. Assign them to the variables `tstat` and `pvalue`.
+- Verify that using the normal approximation here is valid as well by computing the difference between both p-values.
 
 `@hint`
 
+- The type of the test as well as the null hypothesis can be specified via the arguments `alternative` and `mu`.
+- t statistic and p-value can be obtained via `$statistic` and `$p.value`, respectively.
+
 `@pre_exercise_code`
 ```{r}
-
+cps <- read.table("http://s3.amazonaws.com/assets.datacamp.com/production/course_1276/datasets/cps_ch3.csv", header = T, sep = ";")
+tstat <- (mean(cps$ahe12)-23.5)/(sd(cps$ahe12)/sqrt(length(cps$ahe12)))
+pval <- 1-pnorm(tstat)
 ```
 
 `@sample_code`
 ```{r}
+# Conduct the hypothesis test from previous exercises with t.test()
+
+
+# Extract t statistic and p-value from list created by t.test()
+
+
+
+# Verify that using the normal approximation here is valid as well
+
 
 ```
 
 `@solution`
 ```{r}
+# Conduct the hypothesis test from previous exercises with t.test()
+t.test(cps$ahe12, alternative = "greater", mu = 23.5)
+
+# Extract t statistic and p-value from list created by t.test()
+tstat <- t.test(cps$ahe12, alternative = "greater", mu = 23.5)$statistic
+pvalue <- t.test(cps$ahe12, alternative = "greater", mu = 23.5)$p.value
+
+# Verify that using the normal approximation here is valid as well
+pvalue - pval
 
 ```
 
 `@sct`
 ```{r}
+test_function_result('t.test')
+test_object('tstat')
+test_object('pvalue')
+test_or(test_student_typed('pvalue - pval'), test_student_typed('pval - pvalue'))
+```
 
+
+---
+## 7. Hypothesis Test - two sample t-test
+
+```yaml
+type: NormalExercise
+key: cb2df0f522
+lang: r
+xp: 100
+skills: 1
+```
+
+Consider the annual maximum sea levels at Port Pirie (Southern Australia) and Fremantle (Western Australia) for the last 30 years.
+
+The observations are available in the variables `portpirie` and `fremantle` in your working environment.
+
+`@instructions`
+
+- Test whether there is a significant difference in the annual maximum sea levels at a significance level of $\alpha=0.05$.
+
+`@hint`
+
+- We test $H\_0:\mu\_{P}-\mu\_{F}=0$ vs. $H\_1:\mu\_{P}-\mu\_{F}\ne 0$. That is, we conduct a two sample t-test.
+- For a two sample t-test `t.test()` expects two vectors containing the data.
+
+`@pre_exercise_code`
+```{r}
+set.seed(123)
+portpirie <- runif(30, 3.6, 4.6)
+fremantle <- runif(30, 1.2, 1.8)
+```
+
+`@sample_code`
+```{r}
+# Conduct a two sample t-test
+
+
+```
+
+`@solution`
+```{r}
+# Conduct a two sample t-test
+t.test(portpirie, fremantle)
+
+```
+
+`@sct`
+```{r}
+test_or(test_output_contains('t.test(portpirie, fremantle)'), test_output_contains('t.test(fremantle, portpirie)'))
 ```
 
 ---
@@ -404,74 +491,45 @@ xp: 100
 skills: 1
 ```
 
+Reconsider the test situation concerning the annual maximum sea levels at Port Pirie and Fremantle.
+
+The variables `portpirie` and `fremantle` are again available in your working environment.
 
 `@instructions`
 
-- Construct a confidence interval using `t.test()`.
+- Construct a 95%-confidence interval for the difference in the sea levels using `t.test()`.
 
 `@hint`
 
-- The function `t.test()` computes by default a confidence interval
+- The function `t.test()` computes by default a confidence interval which is accessible via `$conf.int`.
 
 `@pre_exercise_code`
 ```{r}
-
+set.seed(123)
+portpirie <- runif(30, 3.6, 4.6)
+fremantle <- runif(30, 1.2, 1.8)
 ```
 
 `@sample_code`
 ```{r}
+# Construct a confidence interval using t.test()
+
 
 ```
 
 `@solution`
 ```{r}
+# Construct a confidence interval using t.test()
+t.test(portpirie, fremantle)$conf.int
 
 ```
 
 `@sct`
 ```{r}
-
+test_or(test_output_contains('t.test(portpirie, fremantle)$conf.int'), test_output_contains('t.test(fremantle, portpirie)$conf.int'))
 ```
 ---
-## 9. Hypothesis Test - two sample t-test
-
-```yaml
-type: NormalExercise
-key: cb2df0f522
-lang: r
-xp: 100
-skills: 1
-```
-
-
-`@instructions`
-
-- Test the null using a two sample t-test.
-
-`@hint`
-
-`@pre_exercise_code`
-```{r}
-
-```
-
-`@sample_code`
-```{r}
-
-```
-
-`@solution`
-```{r}
-
-```
-
-`@sct`
-```{r}
-
-```
-
----
-## 10. (Co)variance and Correlation I
+## 9. (Co)variance and Correlation I
 
 ```yaml
 type: NormalExercise
@@ -537,7 +595,7 @@ test_function_result("cor")
 ```
 
 ---
-## 11. (Co)variance and Correlation II
+## 10. (Co)variance and Correlation II
 
 ```yaml
 type: NormalExercise
@@ -547,9 +605,11 @@ xp: 100
 skills: 1
 ```
 
-In this exercise we want to examine the limitations of the correlation as a dependency measure. Once the session has initialized you will see the plot of 100 realizations of $Y$ against $X$.
+In this exercise we want to examine the limitations of the correlation as a dependency measure. 
 
-To do so consider the random sample $(X\_i, Y\_i)$ for $i=1,...,100$. The respective vectors $X$ and $Y$ are already available in your working environment as `X` and `Y`.
+Once the session has initialized you will see the plot of 100 realizations from two random variables $X$ and $Y$.
+
+The respective observations are available in the vectors `X` and `Y` in your working environment.
 
 `@instructions`
 
@@ -569,7 +629,7 @@ plot(Y ~ X)
 
 `@sample_code`
 ```{r}
-# Compute the correlation between x and y
+# Compute the correlation between X and Y
 
 
 ```
@@ -584,5 +644,5 @@ cor(X, Y)
 `@sct`
 ```{r}
 test_function_result("cor")
-success_msg('Correct! The correlation can only measure linear dependencies. However the dependency here is clearly nonlinear (exponential).')
+success_msg('Correct! The correlation is able to capture the negative relationship between both variables. However it only measures linear dependencies, whereas the dependency here is clearly nonlinear (exponential).')
 ```
