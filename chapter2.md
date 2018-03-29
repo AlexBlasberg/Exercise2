@@ -157,11 +157,13 @@ skills: 1
 
 Let $Y\sim\mathcal{N}(0,10)$. In this exercise we want to illustrate the result that the sample mean
 
-$$\hat{\mu}\_Y=\sum\limits\_{i=1}^{100}a\_iY\_i$$ with equal weighting scheme $a\_i=\frac{1}{100}$ for $i=1,...,100$ is the best linear unbiased estimator (BLUE) of $\mu\_Y$. 
+$$\hat{\mu}\_Y=\sum\limits\_{i=1}^{n}a\_iY\_i$$ with equal weighting scheme $a\_i=\frac{1}{n}$ for $i=1,...,100$ is the best linear unbiased estimator (BLUE) of $\mu\_Y$. 
 
-As an alternative consider the estimator $\tilde{Y}$ with unequal weighting scheme
+As an alternative consider the estimator
 
-$$$$a weighting scheme giving the first 50 observations $w\_i=\frac{15}{1000}$ for $i=1,...,100$ and
+$$\tilde{\mu}\_Y=\sum\limits\_{i=1}^{n}b\_iY\_i$$
+
+where $b\_i$ (with $\sum\limits\_{i=1}^n b\_i = 1$ to ensure unbiasedness) gives the first $\frac{n}{2}$ observations a higher weighting than the second $\frac{n}{2}$ observations. The respective weighting vector is already available as 
 
 `@instructions`
 
@@ -201,12 +203,13 @@ w <- c(rep((1+0.5)/100, 50), rep((1-0.5)/100, 50))
 
 ```
 
+
 ---
-## Hypothesis Test - One sample t-test
+## 4.
 
 ```yaml
 type: NormalExercise
-key: e37112756b
+key: 163cfe0cc0
 lang: r
 xp: 100
 skills: 1
@@ -236,9 +239,201 @@ skills: 1
 ```{r}
 
 ```
+---
+## 5. Hypothesis test - t statistic
+
+```yaml
+type: NormalExercise
+key: e37112756b
+lang: r
+xp: 100
+skills: 1
+```
+
+Consider the CPS data set from Chapter 3.6 again which is available as `cps` in your working environment.
+
+Suppose you want to test the null hypothesis $H\_0:$
+
+`@instructions`
+
+- Compute the t statistic by hand and assign it to `tstat`.
+- Use `tstat` to accept or reject the null hypothesis.
+
+`@hint`
+
+- The t statistic is defined as $\frac{\bar{Y}-\mu\_{Y,0}}{s\_{Y}/\sqrt{n}}$ where is $s\_Y$ denotes the sample variance.
+- To decide whether the null hypothesis is accepted or rejected you can compare the t statistic with the respective quantile of the standard normal distribution.
+
+`@pre_exercise_code`
+```{r}
+cps <- read.table("http://s3.amazonaws.com/assets.datacamp.com/production/course_1276/datasets/cps_ch3.csv", header = T, sep = ";")
+```
+
+`@sample_code`
+```{r}
+# Compute the t statistic by hand and assign it to tstat
+ 
+
+# Use tstat to accept or reject the null
+
+
+```
+
+`@solution`
+```{r}
+# Compute the t statistic by hand and assign it to tstat
+tstat <- (mean(cps$ahe12)-20)/(sd(cps$ahe12)/sqrt(length(cps$ahe12)))
+
+# Use tstat to accept or reject the null
+tstat > qnorm(0.95)
+
+```
+
+`@sct`
+```{r}
+test_object('tstat')
+test_function('qnorm', args = 'p')
+test_student_typed('tstat', times = 2)
+test_or(test_output_contains('T'), test_output_contains('F'))
+```
+
 
 ---
-## Hypothesis Test - Two sample t-test
+## 6. Hypothesis test - p-value
+
+```yaml
+type: NormalExercise
+key: 485fd5f536
+lang: r
+xp: 100
+skills: 1
+```
+
+
+`@instructions`
+
+- Compute the p-value by hand and assign it to `pval`.
+- Use `pval` to accept or reject the null hypothesis.
+
+`@hint`
+
+-
+- We reject the null if $p<\alpha$. Use logical operators to check for this.
+
+`@pre_exercise_code`
+```{r}
+cps <- read.table("http://s3.amazonaws.com/assets.datacamp.com/production/course_1276/datasets/cps_ch3.csv", header = T, sep = ";")
+tstat <- (mean(cps$ahe12)-20)/(sd(cps$ahe12)/sqrt(length(cps$ahe12)))
+```
+
+`@sample_code`
+```{r}
+# Compute the p-value by hand and assign it to pval
+
+
+# Use pval to accept or reject the null
+
+
+```
+
+`@solution`
+```{r}
+# Compute the p-value by hand and assign it to pval
+
+
+# Use pval to accept or reject the null
+pval < 0.05
+
+```
+
+`@sct`
+```{r}
+test_object('pval')
+test_student_typed('pval', times = 2)
+test_or(test_output_contains('T'), test_output_contains('F'))
+```
+
+---
+## 7. Hypothesis test - one sample t-test
+
+```yaml
+type: NormalExercise
+key: 3f74f18146
+lang: r
+xp: 100
+skills: 1
+```
+
+
+`@instructions`
+
+- Do 
+- Extract the t statistic and p-value from the list created by `t.test()`. Assign them to `tstat2` and `pval2`.
+- Compute the difference between 
+
+`@hint`
+
+`@pre_exercise_code`
+```{r}
+
+```
+
+`@sample_code`
+```{r}
+
+```
+
+`@solution`
+```{r}
+
+```
+
+`@sct`
+```{r}
+
+```
+
+---
+## 8. Confidence interval
+
+```yaml
+type: NormalExercise
+key: 0896ce3d5c
+lang: r
+xp: 100
+skills: 1
+```
+
+
+`@instructions`
+
+- Construct a confidence interval using `t.test()`.
+
+`@hint`
+
+- The function `t.test()` computes by default a confidence interval
+
+`@pre_exercise_code`
+```{r}
+
+```
+
+`@sample_code`
+```{r}
+
+```
+
+`@solution`
+```{r}
+
+```
+
+`@sct`
+```{r}
+
+```
+---
+## 9. Hypothesis Test - two sample t-test
 
 ```yaml
 type: NormalExercise
@@ -276,7 +471,7 @@ skills: 1
 ```
 
 ---
-## (Co)variance and Correlation I
+## 10. (Co)variance and Correlation I
 
 ```yaml
 type: NormalExercise
@@ -342,7 +537,7 @@ test_function_result("cor")
 ```
 
 ---
-## (Co)variance and Correlation II
+## 11. (Co)variance and Correlation II
 
 ```yaml
 type: NormalExercise
@@ -352,11 +547,13 @@ xp: 100
 skills: 1
 ```
 
-Once the session has initialized you will see the plot of $Y$ against $X$.
+In this exercise we want to examine the limitations of the correlation as a dependency measure. Once the session has initialized you will see the plot of 100 realizations of $Y$ against $X$.
+
+To do so consider the random sample $(X\_i, Y\_i)$ for $i=1,...,100$. The respective vectors $X$ and $Y$ are already available in your working environment as `X` and `Y`.
 
 `@instructions`
 
-- Compute the correlation between $X$ and $Y$. 
+- Compute the correlation between $X$ and $Y$. Interpret your result critically.
 
 `@hint`
 
@@ -381,11 +578,11 @@ plot(Y ~ X)
 ```{r}
 # Compute the correlation between x and y
 cor(X, Y)
-
+# The correlation is only able to quantify linear relationships which is not the case here.
 ```
 
 `@sct`
 ```{r}
 test_function_result("cor")
-success_msg('Correct! The correlation can only measure linear dependencies. However the dependency is clearly nonlinear (exponential).')
+success_msg('Correct! The correlation can only measure linear dependencies. However the dependency here is clearly nonlinear (exponential).')
 ```
