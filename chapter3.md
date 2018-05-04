@@ -224,9 +224,87 @@ USSR <- sum(model_unres$residuals^2)
 
 `@sct`
 ```{r}
-test_object("model_res")
+test_or({
+
+test_function('lm', 
+             args = c('formula', 'data'),
+             not_called_msg = "Funktion nicht oder falsch aufgerufen.",
+             args_not_specified_msg = "Funktion nicht oder falsch aufgerufen."
+             )
+             
+
+},{
+
+sol <- ex() %>% override_solution("model_res <- lm(medv ~ lstat + I(crim + age), data = Boston)")
+sol %>% check_function('lm')
+
+},{
+
+sol <- ex() %>% override_solution("model_res <- lm(medv ~ lstat + I(age + crim), data = Boston)")
+sol %>% check_function('lm')
+
+},{
+
+sol <- ex() %>% override_solution("model_res <- lm(medv ~ I(crim + age) + lstat, data = Boston)")
+sol %>% check_function('lm')
+
+},{
+
+sol <- ex() %>% override_solution("model_res <- lm(medv ~ I(age + crim) + lstat, data = Boston)")
+sol %>% check_function('lm')
+
+},{
+
+sol <- ex() %>% override_solution("model_res <- lm(medv ~ lstat + I(crim + age), data = Boston)")
+sol %>% check_function('lm')
+
+},{
+
+
+
+},{
+
+
+
+},{
+
+
+
+},{
+
+
+
+},{
+
+
+
+},{
+
+
+
+},{
+
+
+
+},{
+
+
+
+},{
+
+
+
+},{
+
+
+
+},{
+
+
+})
+test_object("model_res", eval = F)
 test_object("RSSR")
-test_object("model_unres")
+test_object("model_unres", eval = F)
 test_object("USSR")
 success_msg("Correct! Note that the SSR of the restricted model is always greater or equal than the SSR of the unrestricted model.")
 ```
