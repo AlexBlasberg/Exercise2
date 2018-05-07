@@ -240,37 +240,7 @@ sol %>% check_function('lm') %>% check_arg('formula') %>% check_equal()
 
 },{
 
-sol <- ex() %>% override_solution("model_res <- lm(medv ~ lstat + I(age + crim), data = Boston)")
-sol %>% check_function('lm') %>% check_arg('formula') %>% check_equal()
-
-},{
-
-sol <- ex() %>% override_solution("model_res <- lm(medv ~ I(crim + age) + lstat, data = Boston)")
-sol %>% check_function('lm') %>% check_arg('formula') %>% check_equal()
-
-},{
-
-sol <- ex() %>% override_solution("model_res <- lm(medv ~ I(age + crim) + lstat, data = Boston)")
-sol %>% check_function('lm') %>% check_arg('formula') %>% check_equal()
-
-},{
-
 sol <- ex() %>% override_solution("model_res <- lm(Boston$medv ~ Boston$lstat + I(Boston$crim + Boston$age))")
-sol %>% check_function('lm') %>% check_arg('formula') %>% check_equal()
-
-},{
-
-sol <- ex() %>% override_solution("model_res <- lm(Boston$medv ~ Boston$lstat + I(Boston$age + Boston$crim))")
-sol %>% check_function('lm') %>% check_arg('formula') %>% check_equal()
-
-},{
-
-sol <- ex() %>% override_solution("model_res <- lm(Boston$medv ~ I(Boston$crim + Boston$age) + Boston$lstat)")
-sol %>% check_function('lm') %>% check_arg('formula') %>% check_equal()
-
-},{
-
-sol <- ex() %>% override_solution("model_res <- lm(Boston$medv ~ I(Boston$age + Boston$crim) + Boston$lstat)")
 sol %>% check_function('lm') %>% check_arg('formula') %>% check_equal()
 
 })
@@ -292,57 +262,7 @@ sol %>% check_function('lm') %>% check_arg('formula') %>% check_equal()
 
 },{
 
-sol <- ex() %>% override_solution("model_unres <- lm(medv ~ lstat + age + crim, data = Boston)")
-sol %>% check_function('lm') %>% check_arg('formula') %>% check_equal()
-
-},{
-
-sol <- ex() %>% override_solution("model_unres <- lm(medv ~ crim + age + lstat, data = Boston)")
-sol %>% check_function('lm') %>% check_arg('formula') %>% check_equal()
-
-},{
-
-sol <- ex() %>% override_solution("model_unres <- lm(medv ~ crim + lstat+ age, data = Boston)")
-sol %>% check_function('lm') %>% check_arg('formula') %>% check_equal()
-
-},{
-
-sol <- ex() %>% override_solution("model_unres <- lm(medv ~ age + crim + lstat, data = Boston)")
-sol %>% check_function('lm') %>% check_arg('formula') %>% check_equal()
-
-},{
-
-sol <- ex() %>% override_solution("model_unres <- lm(medv ~ age + lstat + crim, data = Boston)")
-sol %>% check_function('lm') %>% check_arg('formula') %>% check_equal()
-
-},{
-
 sol <- ex() %>% override_solution("model_unres <- lm(Boston$medv ~ Boston$lstat + Boston$crim + Boston$age)")
-sol %>% check_function('lm') %>% check_arg('formula') %>% check_equal()
-
-},{
-
-sol <- ex() %>% override_solution("model_unres <- lm(Boston$medv ~ Boston$lstat + Boston$age + Boston$crim)")
-sol %>% check_function('lm') %>% check_arg('formula') %>% check_equal()
-
-},{
-
-sol <- ex() %>% override_solution("model_unres <- lm(Boston$medv ~ Boston$crim + Boston$age + Boston$lstat)")
-sol %>% check_function('lm') %>% check_arg('formula') %>% check_equal()
-
-},{
-
-sol <- ex() %>% override_solution("model_unres <- lm(Boston$medv ~ Boston$crim + Boston$lstat + Boston$age)")
-sol %>% check_function('lm') %>% check_arg('formula') %>% check_equal()
-
-},{
-
-sol <- ex() %>% override_solution("model_unres <- lm(Boston$medv ~ Boston$age + Boston$crim + Boston$lstat)")
-sol %>% check_function('lm') %>% check_arg('formula') %>% check_equal()
-
-},{
-
-sol <- ex() %>% override_solution("model_unres <- lm(Boston$medv ~ Boston$age + Boston$lstat + Boston$crim)")
 sol %>% check_function('lm') %>% check_arg('formula') %>% check_equal()
 
 })
