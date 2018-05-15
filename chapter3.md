@@ -12,9 +12,9 @@ xp: 100
 skills: 1
 ```
 
-Reconsider the `Boston` data set and the following estimated model from the previous chapter:
+Reconsider the `Boston` data set and the following estimated model (with homoscedasticity-only standard errors in parentheses) from the previous chapter:
 
-$$\widehat{medv}\_i = \underset{(0.74)}{32.828} \underset{(0.08)}{-0.994} \times lstat\_i \underset{(0.03)}{-0.083} \times crim\_i + \underset{(0.02)}{0.038} \times age\_i.$$
+$$\widehat{medv}\_i = \underset{(0.75)}{32.828} \underset{(0.05)}{-0.994} \times lstat\_i \underset{(0.04)}{-0.083} \times crim\_i + \underset{(0.01)}{0.038} \times age\_i.$$
 
 Just as in the simple linear regression framework we can conduct hypothesis tests for each coefficent in the multiple regression framework as well. To do so assume that we want to test the null $H\_0:\beta\_j=0$ against the alternative $H\_1:\beta\_j\ne 0$ for all $j$.
 
@@ -166,7 +166,7 @@ $$medv\_i = \beta\_0 + \beta\_1\times lstat\_i + \beta\_2\times crim\_i + \beta\
 
 we could test the null $H\_0: \beta\_2=\beta\_3$ vs. the alternative $H\_1: \beta\_2\ne\beta\_3$ (which in fact is a joint hypothesis as we impose a restriction on two regression coefficients).
 
-The basic idea behind testing such a hypothesis is now to conduct two regressions. For one of the regressions we incorporate the restriction (we call this the restricted model), whereas for the other regression the restriction is left out (we call this the unrestricted model). From this starting point we can then construct a test statistic which, under the null, follows a well known distribution, namely the $F$ distribution (see next exercise).
+The basic idea behind testing such a hypothesis is now to conduct two regressions. For one of the regressions we incorporate the restriction (we call this the restricted model), whereas for the other regression the restriction is left out (we call this the unrestricted model). From this starting point we can then construct a test statistic which, under the null, follows a well known distribution, namely a $F$ distribution (see next exercise).
 However in this exercise we start with the initial steps or computations necessary to construct the test statistic. So please do the following:
 
 The packages `AER` and `MASS` have been loaded.
@@ -281,7 +281,7 @@ lang: r
 xp: 100
 skills: 1
 ```
-After estimating the necessary models and computing the SSR we can now compute the test statistic and conduct the hypothesis test. As mentioned in the last exercise the test statistic follows the $F$ distribution or to be more precise the 
+After estimating the necessary models and computing the SSR we can now compute the test statistic and conduct the hypothesis test. As mentioned in the last exercise the test statistic follows a $F$ distribution or more precisely a $F\_{q,n-k-1}$ distribution where $q$ and $k$ denote the number of restrictions under the null and regressors in the unrestricted model, respectively.
 
 The packages `AER` and `MASS` have been loaded. Both models (`model_res` and `model_unres`) as well as their SSR (`RSSR` and `USSR`) are available in your working environment.
 
@@ -294,8 +294,8 @@ The packages `AER` and `MASS` have been loaded. Both models (`model_res` and `mo
 
 `@hint`
 
-- The F statistic is defined as $\frac{RSSR-USSR/q}{USSR/(n-k-1)}$ where $q$ and $k$ denote the number of restrictions under the null and regressors in the unrestricted model, respectively.
-- The p value can be computed as $1-F\_{q,n-k-1}(F^{act})$ where $F\_{q,n-k-1}$ denotes the cdf of the F distribution with degrees of freedom $q$ and $n-k-1$ and $F^{act}$ the computed F statistic.
+- The F statistic is defined as $\frac{RSSR-USSR/q}{USSR/(n-k-1)}$.
+- The p value can be computed as $1-F\_{q,n-k-1}(F^{act})$ where $F\_{q,n-k-1}$ denotes the cdf of the F distribution (`pf()`) with degrees of freedom $q$ and $n-k-1$ and $F^{act}$ the computed F statistic.
 - `linearHypothesis()` expects the unrestricted model as well as the null hypothesis.
 
 `@pre_exercise_code`
@@ -330,7 +330,7 @@ USSR <- sum(model_unres$residuals^2)
 Fstat <- ((RSSR-USSR)/1)/(USSR/(nrow(Boston)-3-1))
 
 # Compute the p value and assign it to pval.
-pval <- 1 - pf(Fstat, 1, nrow(Boston)-3-1)
+pval <- 1 - pf(Fstat, df1 = 1, df2 = nrow(Boston)-3-1)
 
 # Check whether the null is rejected at a 1% significance level.
 pval < 0.01
@@ -346,7 +346,7 @@ test_object("Fstat")
 test_object("pval")
 test_or(test_output_contains("pval < 0.01"), test_output_contains("pval > 0.01"))
 test_function_result("linearHypothesis")
-success_msg("Correct! The hypothesis is rejected at a 1% significance level.")
+success_msg("Correct! The null hypothesis is rejected at a 1% significance level.")
 ```
 
 ---
@@ -360,27 +360,45 @@ xp: 100
 skills: 1
 ```
 
+As for single .. resulting in simple confidence interval on the real line as you know from previous chapters
+
+The packages `AER` and `MASS` have been loaded. The unrestricted model `model_unres` is available in your working environment.
 
 `@instructions`
+
+- Construct a 99% confidence set
+- Verify your visual inspection by 
 
 `@hint`
 
 `@pre_exercise_code`
 ```{r}
-
+library(AER)
+library(MASS)
+model_unres <- lm(medv ~ lstat + crim + age, data = Boston)
 ```
 
 `@sample_code`
 ```{r}
+# 
+
+
+#
+
 
 ```
 
 `@solution`
 ```{r}
+# 
+confidenceEllipse(model_unres, which.coef = c("crim", "lstat"))
+
+#
+linearHypothesis(model_unres, c("crim = 0", "lstat = 0"))
 
 ```
 
 `@sct`
 ```{r}
-
+success_msg("Correct! The hypothesis is rejected at a 1% significance level.")
 ```
