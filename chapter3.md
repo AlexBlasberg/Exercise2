@@ -72,6 +72,57 @@ test_object("pval")
 test_or(test_output_contains("pval < 0.01"), test_output_contains("pval > 0.01"))
 success_msg("All but the coefficent for the crime rate (crim) can be rejected at a 1% significance level.")
 ```
+---
+## Hypothesis Testing in a Multiple Regression Model - Confidence Intervals
+
+```yaml
+type: NormalExercise
+key: e1463dbaad
+lang: r
+xp: 100
+skills: 1
+```
+
+Again consider the model 
+
+$$\widehat{medv}\_i = \underset{(0.75)}{32.828} \underset{(0.05)}{-0.994} \times lstat\_i \underset{(0.04)}{-0.083} \times crim\_i + \underset{(0.01)}{0.038} \times age\_i.$$
+
+which is available as `mod` in your working environment. The packages `AER` and `MASS` have been loaded.
+
+`@instructions`
+
+- Construct a 99% confidence interval for all model coefficients. Decide whether we can reject the null $H\_0:\beta\_j=0$ for all $j$.
+
+`@hint`
+
+- You can use `confint()` to construct confidence intervals. The confidence level can be set via `level`.
+
+`@pre_exercise_code`
+```{r}
+library(AER)
+library(MASS)
+mod <- lm(medv ~ lstat + crim + age, data = Boston)
+```
+
+`@sample_code`
+```{r}
+# Construct a 99% confidence interval for all coefficients
+
+
+```
+
+`@solution`
+```{r}
+# Construct a 99% confidence interval for all coefficients
+confint(mod, level = 0.99)
+
+```
+
+`@sct`
+```{r}
+test_function('confint', args = c('object', 'level'))
+success_msg('Correct! Analogously to the previous exercise we can see that 0 is not an element for all confidence intervals but for the one of the crime rate. Hence, as expected, the test decision remains the same.')
+```
 
 ---
 ## Hypothesis Testing in a Multiple Regression Model - Can we do more robust?
@@ -84,70 +135,57 @@ xp: 100
 skills: 1
 ```
 
+`mod`, the `lm` object with the estimated model
+
+$$\widehat{medv}\_i = 32.828 - 0.994 \times lstat\_i - 0.083 \times crim\_i + 0.038 \times age\_i.$$
+
+is available in your working environment. The packages `AER` and `MASS` have been loaded.
+
 
 `@instructions`
 
-- 
-- 
-- 
+- Print a coefficient summary using heteroscedasticity-robust standard errors.
+- Access entries of the matrix created by `coeftest()` to check with the help of logical operators whether the hypotheses are rejected at a 1% significance level.
 
 `@hint`
 
+- Inside of `coeftest()` one can set the argument `vcov.` to force the function to use robust standard errors.
+- The p values are contained in the fourth column of the matrix. Use square brackets to access them.
+
 `@pre_exercise_code`
 ```{r}
-
+library(AER)
+library(MASS)
+mod <- lm(medv ~ lstat + crim + age, data = Boston)
 ```
 
 `@sample_code`
 ```{r}
+# Print a coefficient summary using robust standard errors.
+
+
+# Check whether the hypotheses are rejected at a 1% significance level.
+
 
 ```
 
 `@solution`
 ```{r}
+# Print a coefficient summary using robust standard errors.
+coeftest(mod, vcov. = vcovHC)
+
+# Check whether the hypotheses are rejected at a 1% significance level.
+coeftest(mod, vcov. = vcovHC)[, 4] < 0.01
 
 ```
 
 `@sct`
 ```{r}
-
+test_function_result('coeftest')
+test_or(test_output_contains("coeftest(mod, vcov. = vcovHC)[, 4] < 0.01", incorrect_msg = 'Not correct! Please make sure you select the correct entries of the matrix.'), test_output_contains("coeftest(mod, vcov. = vcovHC)[, 4] > 0.01", incorrect_msg = 'Not correct! Please make sure you select the correct entries of the matrix.'))
+success_msg('Correct! We see that by using robust standard errors the coefficient for the crime rate (crim) becomes significant, whereas the coefficient for the average age of the buildings (age) becomes insignificant at a 1% significance level.')
 ```
 
----
-## Hypothesis Testing in a Multiple Regression Model - Confidence Intervals
-
-```yaml
-type: NormalExercise
-key: e1463dbaad
-lang: r
-xp: 100
-skills: 1
-```
-
-
-`@instructions`
-
-`@hint`
-
-`@pre_exercise_code`
-```{r}
-
-```
-
-`@sample_code`
-```{r}
-
-```
-
-`@solution`
-```{r}
-
-```
-
-`@sct`
-```{r}
-
-```
 
 ---
 ## Joint Hypothesis Testing - F Test I
@@ -360,45 +398,66 @@ xp: 100
 skills: 1
 ```
 
-As for single .. resulting in simple confidence interval on the real line as you know from previous chapters
+As you know from previous chapters constructing a confidence set for a single regression coefficient results in a simple confidence interval on the real line. However if we consider $n$ regression coefficients jointly (as we do in a joint hypothesis testing setting) we move from $\mathbb{R}$ to $\mathbb{R}^n$ resulting in a n-dimensional confidence set. For the sake of illustration we then often choose $n=2$, so that we end up with a representable two-dimensional plane.
 
-The packages `AER` and `MASS` have been loaded. The unrestricted model `model_unres` is available in your working environment.
+Now recall the model 
+
+$$\widehat{medv}\_i = \underset{(0.75)}{32.828} \underset{(0.05)}{-0.994} \times lstat\_i \underset{(0.04)}{-0.083} \times crim\_i + \underset{(0.01)}{0.038} \times age\_i.$$
+
+which is available as `mod` in your working environment and assume we want to test the null $H\_0: \beta\_2=\beta\_3=0$ vs. $H\_1: \beta\_2\ne 0$ or $\beta\_3\ne 0$.
+
+The packages `AER` and `MASS` have been loaded.
 
 `@instructions`
 
-- Construct a 99% confidence set
-- Verify your visual inspection by 
+- Construct a 99% confidence set for the coefficients of `crim` and `lstat`, that is a two-dimensional confidence set. Can you reject the null stated above?
+- Verify your visual inspection by conducting a corresponding F test.
 
 `@hint`
+
+- You can use `confidenceEllipse()` to construct a two dimensional confidence set. Besides the coefficients for which the confidence set shall be constructed (`which.coef`), you have to specify the confidence level (`levels`).
+- As usual you can use `linearHypothesis()` to conduct a F test. However note that we test two restrictions now, hence you have to pass a vector consisting of both linear restrictions.
 
 `@pre_exercise_code`
 ```{r}
 library(AER)
 library(MASS)
-model_unres <- lm(medv ~ lstat + crim + age, data = Boston)
+mod <- lm(medv ~ lstat + crim + age, data = Boston)
 ```
 
 `@sample_code`
 ```{r}
-# 
+# Construct a 99% confidence set for the coefficents of crim and lstat.
 
 
-#
+# Conduct a corresponding F test.
 
 
 ```
 
 `@solution`
 ```{r}
-# 
-confidenceEllipse(model_unres, which.coef = c("crim", "lstat"))
+# Construct a 99% confidence set for crim and lstat.
+confidenceEllipse(mod, which.coef = c("crim", "lstat"), levels = 0.99)
 
-#
-linearHypothesis(model_unres, c("crim = 0", "lstat = 0"))
+# Conduct a corresponding F test.
+linearHypothesis(mod, c("crim = 0", "lstat = 0"))
 
 ```
 
 `@sct`
 ```{r}
-success_msg("Correct! The hypothesis is rejected at a 1% significance level.")
+test_or({
+  fun <- ex() %>% check_function('confidenceEllipse')
+  fun %>% check_arg('model') %>% check_equal()
+  fun %>% check_arg('which.coef') %>% check_equal()
+  fun %>% check_arg('levels') %>% check_equal()
+}, {
+  fun <- ex() %>% override_solution('confidenceEllipse(mod, which.coef = c("lstat", "crim"), levels = 0.99)') %>% check_function('confidenceEllipse')
+  fun %>% check_arg('model') %>% check_equal()
+  fun %>% check_arg('which.coef') %>% check_equal()
+  fun %>% check_arg('levels') %>% check_equal()
+})
+test_function_result('linearHypothesis')
+success_msg("Correct! Since (0,0) is not an element of the 99% confidence set, the null hypothesis is rejected at a 1% significance level.")
 ```
