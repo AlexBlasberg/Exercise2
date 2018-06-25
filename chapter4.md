@@ -11,8 +11,7 @@ lang: r
 xp: 100
 skills: 1
 ```
-This exercises
-In order to illustrate this consider the following simple linear regression model
+Consider the following simple linear regression model
 
 $$medv\_i = \beta\_0 + \beta\_1\times lstat\_i + u\_i.$$
 
@@ -32,7 +31,6 @@ The package `MASS` has been loaded. The model object from the above regression i
 
 `@pre_exercise_code`
 ```{r}
-library(AER)
 library(MASS)
 mod <- lm(medv ~ lstat, data = Boston)
 ```
@@ -43,6 +41,7 @@ mod <- lm(medv ~ lstat, data = Boston)
 
 
 # Plot medv against lstat and draw the regression line
+
 
 
 ```
@@ -72,8 +71,8 @@ test_or(ex() %>% check_function('plot') %>% {
         ex() %>% override_solution('plot(Boston$medv ~ Boston$lstat)') %>% check_function('plot') %>%
           check_arg('formula') %>% check_equal()
         )
-ex() %>% check_function("abline") %>% check_arg("reg") %>% check_equal()
-success_msg("Although the correlation coefficient suggests that medv and lstat ..., the relationship between them is clearly nonlinear. Hence a simple linear regression specification is inappropriate here.")
+#ex() %>% check_function("abline") %>% check_arg("reg") %>% check_equal()
+success_msg("Although the correlation coefficient suggests that medv and lstat are negatively linearly dependent, the relationship between them is clearly nonlinear. Hence a simple linear regression specification is inappropriate here.")
 ```
 
 ---
@@ -86,7 +85,7 @@ lang: r
 xp: 100
 skills: 1
 ```
-In the previous exercise we saw that the correlation coefficient is not able to assess whether a linear regression model 
+In the previous exercise we saw that the correlation coefficient is not able to properly capture the functional form of a regression model in so far as it suggested a linear form, whereas the true functional form seems to be a nonlinear (e.g. exponential) one.
 Therefore consider as an alternative the following nonlinear model specification
 
 $$medv\_i = \beta\_0 + \beta\_1\times\log(lstat\_i) + u\_i.$$
@@ -96,7 +95,7 @@ The package `MASS` has been loaded.
 `@instructions`
 
 - Conduct the regression from above and assign the results to `log_mod`.
-- Visualize your results by drawing a scatterplot and adding the corresponding regression line.
+- Visualize your results by drawing a scatterplot and adding the corresponding regression line. In comparison to the previous exercise what do you notice now? 
 
 `@hint`
 
@@ -105,7 +104,6 @@ The package `MASS` has been loaded.
 
 `@pre_exercise_code`
 ```{r}
-library(AER)
 library(MASS)
 ```
 
@@ -115,6 +113,7 @@ library(MASS)
 
 
 # Draw a scatterplot and add the corresponding regression line
+
 
 
 ```
@@ -127,6 +126,7 @@ mod_log <- lm(medv ~ log(lstat), data = Boston)
 # Draw a scatterplot and add the corresponding regression line
 plot(medv ~ log(lstat), data = Boston)
 abline(mod_log, col = "red")
+
 ```
 
 `@sct`
@@ -144,11 +144,11 @@ test_or(ex() %>% check_function('plot') %>% {
           check_arg('formula') %>% check_equal()
         )
 #ex() %>% check_function("abline") %>% check_arg("reg") %>% check_equal()
-success_msg("Although the relationship is not perfectly linear yet, using a log transformation considerably improves our model fit.")
+success_msg("Although the relationship is not perfectly linear yet, using a log transformation considerably improves our model fit and seems to be a reasonable model specification.")
 ```
 
 ---
-## 3.
+## 3. Optimal Polynomial Order - Sequential Testing
 
 ```yaml
 type: NormalExercise
@@ -159,23 +159,45 @@ skills: 1
 ```
 
 
+
+The packages `AER` and `MASS` have been loaded.
+
 `@instructions`
+
+- Determine the optimal order of the polylog model by the sequential testing approach. Assume a maximum polynomial order of $r=4$.
 
 `@hint`
 
 `@pre_exercise_code`
 ```{r}
-
+library(AER)
+library(MASS)
 ```
 
 `@sample_code`
 ```{r}
+# Find the optimal polynomial order of the polylog model.
+
+
+
+
+
+
+
 
 ```
 
 `@solution`
 ```{r}
-
+# Find the optimal polynomial order of the polylog model.
+for(i in 4:1){
+  mod  <- lm(medv ~ poly(log(lstat), i, raw = T), data = Boston)
+  pval <- coeftest(mod)[(i+1), 4]
+  if(pval < 0.05){
+    print(i)
+    break
+  }
+}
 ```
 
 `@sct`
