@@ -158,15 +158,29 @@ xp: 100
 skills: 1
 ```
 
+From the previous exercise recall the following model
 
+$$medv\_i = \beta\_0 + \beta\_1\times\log(lstat\_i) + u\_i.$$
+
+We already saw that this model specification seems to be a reasonable choice. However we cannot be entirely sure, if a higher polynomial order may be more suited to describe the data. Therefore please do the following:
 
 The packages `AER` and `MASS` have been loaded.
 
 `@instructions`
 
-- Determine the optimal order of the polylog model by the sequential testing approach. Assume a maximum polynomial order of $r=4$.
+- Determine the optimal order of the polylog model by the sequential testing approach. Assume a maximum polynomial order of $r=4$. You are more or less free to choose a way to solve this as long as you use a `for()` loop. We recommend the following approach:
+    1. Estimate a model, say `mod`, which starts with the highest polynomial order.
+    2. Save the p-value (with robust standard errors) for the relevant parameter and compare it with the significance level $\alpha$.
+    3. If you cannot reject the null, repeat steps 1 and 2 for the next lowest polynomial order, otherwise stop the loop and print out the polynomial order.
+- Extract the $R^2$ of the selected model and assign it to the variable `R2`. 
 
 `@hint`
+
+- The index for the `for()` loop should start at 4 and end at 1.
+- You can use `poly()` inside of `lm()` as a generic way of incorporating higher orders of a certain variable in the model. Besides the variable, you have to specify the degree of the polynomial via the argument `degree` and set `raw = TRUE`.
+- As usual, you can use `coeftest()` to obtain p-values (with robust standard errors). Use the structure of the resulting object to extract the relevant p-value.
+- Use an `if()` statement to check whether the condition for no rejection is fulfilled and stop the `for()` loop with the help of `break` otherwise.
+- To obtain the $R^2$, you can use `summary()` and extract it via `$r.squared`.
 
 `@pre_exercise_code`
 ```{r}
@@ -185,6 +199,10 @@ library(MASS)
 
 
 
+
+# Extract the R^2 from the selected model and assign it to R2.
+
+
 ```
 
 `@solution`
@@ -192,12 +210,53 @@ library(MASS)
 # Find the optimal polynomial order of the polylog model.
 for(i in 4:1){
   mod  <- lm(medv ~ poly(log(lstat), i, raw = T), data = Boston)
-  pval <- coeftest(mod)[(i+1), 4]
+  pval <- coeftest(mod, vcov = vcovHC)[(i+1), 4]
   if(pval < 0.05){
     print(i)
     break
   }
 }
+
+# Extract the R^2 from the selected model and assign it to R2.
+R2 <- summary(mod)$r.squared
+
+```
+
+`@sct`
+```{r}
+ex() %>% check_for()
+ex() %>% check_object("R2") %>% check_equal()
+```
+
+---
+## 4. 
+
+```yaml
+type: NormalExercise
+key: b768384af2
+lang: r
+xp: 100
+skills: 1
+```
+
+
+`@instructions`
+
+`@hint`
+
+`@pre_exercise_code`
+```{r}
+
+```
+
+`@sample_code`
+```{r}
+
+```
+
+`@solution`
+```{r}
+
 ```
 
 `@sct`
