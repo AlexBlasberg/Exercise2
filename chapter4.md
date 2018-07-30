@@ -1,16 +1,19 @@
 ---
-title       : Nonlinear Regression Functions
-description : Insert the chapter description here
+  title: "Nonlinear Regression Functions"
+  description: "Insert the chapter description here"
 ---
+
 ## 1. Correlation and (Non)linearity I
 
 ```yaml
-type: NormalExercise
-key: 40ca44fb3d
+type: NormalExercise 
 lang: r
-xp: 100
+xp: 100 
 skills: 1
+key: 40ca44fb3d   
 ```
+
+
 Consider the following simple linear regression model
 
 $$medv\_i = \beta\_0 + \beta\_1\times lstat\_i + u\_i.$$
@@ -19,46 +22,45 @@ with `medv` (median house value) and `lstat` (percent of households with low soc
 
 The package `MASS` has been loaded. The model object from the above regression is available as `mod` in your working environment.
 
-`@instructions`
 
+`@instructions`
 - Compute the correlation between `medv` and `lstat`.
 - Plot `medv` against `lstat` and add the regression line from the model object `mod`. What do you notice?
 
 `@hint`
-
 - You can use `cor()` to compute the correlation between variables.
 - As usual you can use `plot()` and `abline()` to visualize regression results.
 
 `@pre_exercise_code`
-```{r}
+
+```{undefined}
 library(MASS)
 mod <- lm(medv ~ lstat, data = Boston)
 ```
 
 `@sample_code`
-```{r}
+
+```{undefined}
 # Compute the correlation between medv and lstat
 
 
 # Plot medv against lstat and draw the regression line
-
-
-
 ```
 
 `@solution`
-```{r}
+
+```{undefined}
 # Compute the correlation between medv and lstat
 cor(Boston$medv, Boston$lstat)
 
 # Plot medv against lstat and draw the regression line
 plot(medv ~ lstat, data = Boston)
 abline(mod, col = "red")
-
 ```
 
 `@sct`
-```{r}
+
+```{undefined}
 ex() %>% check_function("cor") %>% check_result() %>% check_equal()
 test_or(ex() %>% check_function('plot') %>% {
           check_arg(., 'formula') %>% check_equal()
@@ -71,20 +73,23 @@ test_or(ex() %>% check_function('plot') %>% {
         ex() %>% override_solution('plot(Boston$medv ~ Boston$lstat)') %>% check_function('plot') %>%
           check_arg('formula') %>% check_equal()
         )
-#ex() %>% check_function("abline") %>% check_arg("reg") %>% check_equal()
+ex() %>% check_function("abline") %>% check_arg("reg") %>% check_equal(eval = F)
 success_msg("Although the correlation coefficient suggests that medv and lstat are negatively linearly dependent, the relationship between them is clearly nonlinear. Hence a simple linear regression specification is inappropriate here.")
 ```
 
 ---
+
 ## 2. Correlation and (Non)linearity II
 
 ```yaml
-type: NormalExercise
-key: 8bb4d4bbe0
+type: NormalExercise 
 lang: r
-xp: 100
+xp: 100 
 skills: 1
+key: 8bb4d4bbe0   
 ```
+
+
 In the previous exercise we saw that the correlation coefficient is not able to properly capture the functional form of a regression model in so far as it suggested a linear form, whereas the true functional form seems to be a nonlinear (e.g. exponential) one.
 Therefore consider as an alternative the following nonlinear model specification
 
@@ -92,45 +97,44 @@ $$medv\_i = \beta\_0 + \beta\_1\times\log(lstat\_i) + u\_i.$$
 
 The package `MASS` has been loaded.
 
-`@instructions`
 
+`@instructions`
 - Conduct the regression from above and assign the results to `log_mod`.
-- Visualize your results by drawing a scatterplot and adding the corresponding regression line. In comparison to the previous exercise what do you notice now? 
+- Visualize your results by drawing a scatterplot and adding the corresponding regression line. In comparison to the previous exercise what do you notice now?
 
 `@hint`
-
 - Use `lm()` to conduct a regression.
 - As usual you can use `plot()` and `abline()` to visualize regression results.
 
 `@pre_exercise_code`
-```{r}
+
+```{undefined}
 library(MASS)
 ```
 
 `@sample_code`
-```{r}
+
+```{undefined}
 # Conduct the regression and assign it to mod_log
 
 
 # Draw a scatterplot and add the corresponding regression line
-
-
-
 ```
 
 `@solution`
-```{r}
+
+```{undefined}
 # Conduct the regression and assign it to mod_log
 mod_log <- lm(medv ~ log(lstat), data = Boston)
 
 # Draw a scatterplot and add the corresponding regression line
 plot(medv ~ log(lstat), data = Boston)
 abline(mod_log, col = "red")
-
 ```
 
 `@sct`
-```{r}
+
+```{undefined}
 ex() %>% check_object("mod_log") %>% check_equal()
 test_or(ex() %>% check_function('plot') %>% {
           check_arg(., 'formula') %>% check_equal()
@@ -148,15 +152,17 @@ success_msg("Although the relationship is not perfectly linear yet, using a log 
 ```
 
 ---
+
 ## 3. Optimal Polynomial Order - Sequential Testing
 
 ```yaml
-type: NormalExercise
-key: c77bd54d97
+type: NormalExercise 
 lang: r
-xp: 100
+xp: 100 
 skills: 1
+key: c77bd54d97   
 ```
+
 
 From the previous exercise recall the following model
 
@@ -166,16 +172,15 @@ We already saw that this model specification seems to be a reasonable choice. Ho
 
 The packages `AER` and `MASS` have been loaded.
 
-`@instructions`
 
+`@instructions`
 - Determine the optimal order of the polylog model by the sequential testing approach. Assume a maximum polynomial order of $r=4$. You are more or less free to choose a way to solve this as long as you use a `for()` loop. We recommend the following approach:
     1. Estimate a model, say `mod`, which starts with the highest polynomial order.
     2. Save the p-value (with robust standard errors) for the relevant parameter and compare it with the significance level $\alpha$.
     3. If you cannot reject the null, repeat steps 1 and 2 for the next lowest polynomial order, otherwise stop the loop and print out the polynomial order.
-- Extract the $R^2$ of the selected model and assign it to the variable `R2`. 
+- Extract the $R^2$ of the selected model and assign it to the variable `R2`.
 
 `@hint`
-
 - The index for the `for()` loop should start at 4 and end at 1.
 - You can use `poly()` inside of `lm()` as a generic way of incorporating higher orders of a certain variable in the model. Besides the variable, you have to specify the degree of the polynomial via the argument `degree` and set `raw = TRUE`.
 - As usual, you can use `coeftest()` to obtain p-values (with robust standard errors). Use the structure of the resulting object to extract the relevant p-value.
@@ -183,13 +188,15 @@ The packages `AER` and `MASS` have been loaded.
 - To obtain the $R^2$, you can use `summary()` and extract it via `$r.squared`.
 
 `@pre_exercise_code`
-```{r}
+
+```{undefined}
 library(AER)
 library(MASS)
 ```
 
 `@sample_code`
-```{r}
+
+```{undefined}
 # Find the optimal polynomial order of the polylog model.
 
 
@@ -201,12 +208,11 @@ library(MASS)
 
 
 # Extract the R^2 from the selected model and assign it to R2.
-
-
 ```
 
 `@solution`
-```{r}
+
+```{undefined}
 # Find the optimal polynomial order of the polylog model.
 for(i in 4:1){
   mod  <- lm(medv ~ poly(log(lstat), i, raw = T), data = Boston)
@@ -219,47 +225,182 @@ for(i in 4:1){
 
 # Extract the R^2 from the selected model and assign it to R2.
 R2 <- summary(mod)$r.squared
-
 ```
 
 `@sct`
-```{r}
+
+```{undefined}
 ex() %>% check_for()
 ex() %>% check_object("R2") %>% check_equal()
 ```
 
 ---
-## 4. 
+
+## 4. Expected Effect
 
 ```yaml
-type: NormalExercise
-key: b768384af2
+type: NormalExercise 
 lang: r
-xp: 100
+xp: 100 
 skills: 1
+key: b768384af2   
 ```
+
+
+
+
+
+---
+
+## 5. Interactions between Binary Variables
+
+```yaml
+type: NormalExercise 
+xp: 100 
+key: a8c42ca92d   
+```
+
+
+Consider the model
+
+$$medv\_i=\beta\_0+\beta\_1\times chas\_i+\beta\_2\times HighIndus\_i+\beta\_3(chas\_i\times HighIndus\_i)+u\_i$$
+
+\begin{align}
+HighIndus\_i =  \begin{cases}
+      1 & \text{if $indus\geq 10\%$} \\
+      0 & \text{else}.
+    \end{cases}
+\end{align}
+
+The package `MASS` has been loaded.
 
 
 `@instructions`
+- Add the binary variable `HighIndus` to the dataset `Boston`.
+- Conduct the regression from above and assign it to `mod_bb`. How can you interpret
 
 `@hint`
+- Use a logical operator ...
+- Inside of `lm()` you have to two possibilities
 
 `@pre_exercise_code`
-```{r}
 
+```{undefined}
+library(MASS)
 ```
 
 `@sample_code`
-```{r}
+
+```{undefined}
+# Create the binary variable HighIndus and add it to the dataset.
+
+
+# Conduct the regression and assign it to mod_bb.
+
 
 ```
 
 `@solution`
-```{r}
+
+```{undefined}
+# Create the binary variable HighIndus and add it to the dataset.
+Boston$HighIndus <- as.numeric(Boston$indus >= 10)
+
+# Conduct the regression and assign it to mod_bb.
+mod_bb <- lm(medv ~ chas*HighIndus, data = Boston)
 
 ```
 
 `@sct`
-```{r}
 
+```{undefined}
+ex() %>% check_object("Boston$HighIndus") %>% check_equal()
+```
+
+---
+
+## 6. Interactions between Binary and Continuous Variables
+
+```yaml
+type: NormalExercise 
+xp: 100 
+key: 0e902263b6   
+```
+
+
+Now consider the following model
+
+$$medv\_i=\beta\_0+\beta\_1\times chas\_i+\beta\_2\times rm\_i+\beta\_3(chas\_i\times rm\_i)+u\_i$$
+
+with 
+
+The package `MASS` has been loaded.
+
+
+`@instructions`
+- Conduct the regression from above and assign it to `mod_bc`.
+
+`@pre_exercise_code`
+
+```{undefined}
+library(MASS)
+```
+
+`@sample_code`
+
+```{undefined}
+# Conduct the regression and assign it to mod_bc.
+
+
+#
+```
+
+`@solution`
+
+```{undefined}
+# Conduct the regression and assign it to mod_bc.
+mod_bc <- lm(medv ~ chas*rm, data = Boston)
+
+#
+```
+
+---
+
+## 7. Interactions between Continuous Variables
+
+```yaml
+type: NormalExercise 
+xp: 100 
+key: 9dc0c64d78   
+```
+
+
+The package `MASS` has been loaded.
+
+
+`@instructions`
+- Conduct the regression from above and assign it to `mod_cc`.
+
+`@pre_exercise_code`
+
+```{undefined}
+library(MASS)
+```
+
+`@sample_code`
+
+```{undefined}
+# Conduct the regression and assign it to mod_cc.
+
+
+#
+```
+
+`@solution`
+
+```{undefined}
+# Conduct the regression and assign it to mod_cc.
+mod_cc <- lm(medv ~ , data = Boston)
+
+#
 ```
