@@ -263,25 +263,33 @@ key: a8c42ca92d
 
 Consider the model
 
-$$medv\_i=\beta\_0+\beta\_1\times chas\_i+\beta\_2\times HighIndus\_i+\beta\_3(chas\_i\times HighIndus\_i)+u\_i$$
+$$medv\_i=\beta\_0+\beta\_1\times chas\_i+\beta\_2\times old\_i+\beta\_3(chas\_i\times old\_i)+u\_i$$
+
+with $chas\_i$ and $old\_i$ being dummy variables accounting  the presence of the Charles River and , respectively. The latter is constructed as follows
 
 \begin{align}
-HighIndus\_i =  \begin{cases}
-      1 & \text{if $indus\geq 10\%$} \\
-      0 & \text{else}.
+old\_i =  
+    \begin{cases}
+      1 & \text{if $age\geq 95\%$}\\
+      0 & \text{else},
     \end{cases}
 \end{align}
+
+where $age\_i$ is the proportion of owner-occupied units built prior to 1940.
 
 The package `MASS` has been loaded.
 
 
 `@instructions`
-- Add the binary variable `HighIndus` to the dataset `Boston`.
-- Conduct the regression from above and assign it to `mod_bb`. How can you interpret
+- Add the binary variable `old` to the dataset `Boston`.
+- Conduct the regression from above and assign it to `mod_bb`.
+- Obtain coefficient summary  How can you interpret the coefficient $\hat{\beta}\_3$?
 
 `@hint`
-- Use a logical operator ...
-- Inside of `lm()` you have to two possibilities
+- Use a logical operator to create a vector with Boolean entries and then transform it to nu
+- Inside of `lm()` there are two possibilities to incorporate interaction terms:
+        1. `Var1*Var2` to add `Var1`, `Var2` and ``   
+        2. `Var1:Var2` to manually add the interaction term
 
 `@pre_exercise_code`
 
@@ -292,10 +300,13 @@ library(MASS)
 `@sample_code`
 
 ```{undefined}
-# Create the binary variable HighIndus and add it to the dataset.
+# Create the binary variable old and add it to the dataset.
 
 
 # Conduct the regression and assign it to mod_bb.
+
+
+# Print the summary to the console
 
 
 ```
@@ -304,17 +315,59 @@ library(MASS)
 
 ```{undefined}
 # Create the binary variable HighIndus and add it to the dataset.
-Boston$HighIndus <- as.numeric(Boston$indus >= 10)
+Boston$old <- as.numeric(Boston$age >= 95)
 
 # Conduct the regression and assign it to mod_bb.
-mod_bb <- lm(medv ~ chas*HighIndus, data = Boston)
+mod_bb <- lm(medv ~ chas*old, data = Boston)
+
+# Print the summary to the console
+summary(mod_bb)
 
 ```
 
 `@sct`
 
 ```{undefined}
-ex() %>% check_object("Boston$HighIndus") %>% check_equal()
+ex() %>% check_object("Boston", undefined_msg = "Make sure to not remove `Boston`!") %>%
+  check_column("old", col_missing_msg = "Have you added the column `old` to `Boston`?") %>%
+  check_equal(incorrect_msg = "Have you correctly calculated the column `old` based on `age`?")
+test_or({
+  test_object("mod_bb")
+},{
+  f <- ex() %>% override_solution("lm(medv ~ old*chas, data = Boston)") %>% check_function("lm")
+  f %>% check_arg("formula") %>% check_equal()
+},{
+  f <- ex() %>% override_solution("lm(Boston$medv ~ Boston$chas*Boston$old)") %>% check_function("lm")
+  f %>% check_arg("formula") %>% check_equal()
+},{
+  f <- ex() %>% override_solution("lm(Boston$medv ~ Boston$old*Boston$chas)") %>% check_function("lm")
+  f %>% check_arg("formula") %>% check_equal()
+},{
+  f <- ex() %>% override_solution("attach(Boston);lm(medv ~ chas*old)") %>% check_function("lm")
+  f %>% check_arg("formula") %>% check_equal()
+},{
+  f <- ex() %>% override_solution("attach(Boston);lm(medv ~ old*chas)") %>% check_function("lm")
+  f %>% check_arg("formula") %>% check_equal()
+},{
+  f <- ex() %>% override_solution("lm(medv ~ chas + old + chas:old, data = Boston)") %>% check_function("lm")
+  f %>% check_arg("formula") %>% check_equal()
+},{
+  f <- ex() %>% override_solution("lm(medv ~ old + chas + old:chas, data = Boston)") %>% check_function("lm")
+  f %>% check_arg("formula") %>% check_equal()
+},{
+  f <- ex() %>% override_solution("lm(Boston$medv ~ Boston$chas + Boston$old + Boston$chas:Boston$old)") %>% check_function("lm")
+  f %>% check_arg("formula") %>% check_equal()
+},{
+  f <- ex() %>% override_solution("lm(Boston$medv ~ Boston$old + Boston$chas + Boston$old:Boston$chas)") %>% check_function("lm")
+  f %>% check_arg("formula") %>% check_equal()
+},{
+  f <- ex() %>% override_solution("attach(Boston);lm(medv ~ chas + old + chas:old)") %>% check_function("lm")
+  f %>% check_arg("formula") %>% check_equal()
+},{
+  f <- ex() %>% override_solution("attach(Boston);lm(medv ~ old + chas + old:chas)") %>% check_function("lm")
+  f %>% check_arg("formula") %>% check_equal()
+})
+ex() %>% check_function("summary") %>% check_arg("object") %>% check_equal(eval = F)
 ```
 
 ---
